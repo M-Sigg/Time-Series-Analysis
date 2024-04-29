@@ -133,7 +133,7 @@ Summary: \quad Decompose Time Series $X_1,....X_T$ into trend $f(t)$ and s Stati
 \quad Calculating forecast $\hat{X}_{T+h}$:
 \begin{align*}
    &\text{Model: } X_t = \alpha X_{T-1} + Z_T \\
-   &\text{Need to show: } E[X_{T+h}|F_T] = \alpha^h X_t \\
+   &\text{Need to show: } E[X_{T+h}|F_T] = \alpha^h X_T \\
    &\text{\quad where $F_T$ is the information set at time $T$} \\
    &\text{Insert model: } E[\alpha X_{T+h-1} + Z_{T+h}|F_T] \\
    &\text{As $Z_{T+h}$ is independent of $F_T$} \\
