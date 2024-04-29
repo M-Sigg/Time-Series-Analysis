@@ -1,0 +1,254 @@
+Building block time series processes.
+
+\begin{itemize}
+    \item The simplest time series is a iid. series. $\rightarrow X_t = \varepsilon_t$, where $\varepsilon_t$ are iid.
+\end{itemize}
+
+Building a more complicated process assuming access to $\varepsilon_t$.
+
+\begin{align*}
+    X_t&= \varepsilon_t + 0.9\varepsilon_{t-1} &&\text{(Moving Average)} \\
+    X_t&= 0.9X_{t-1} + \varepsilon_t &&\text{(Autoregressive Process)} \\
+    X_t&= \pm \sqrt{|-0.8X_{t-1} + \varepsilon_t|} &&\text{(Nonlinear Process)}
+\end{align*}
+
+\subsection{Definitions}
+
+A \textbf{\underline{stochastic process}} is a collection of random variables that are ordered (indexed) in time.
+
+\begin{itemize}
+    \item[]
+    \begin{itemize}
+        \item Note: they may be discrete or continuous
+    \end{itemize}
+    \item For each $t$ there is a random variable $\Romanbar{X}_t$, and the collection you can call simply $\Romanbar{X}$.
+    \item Usually "realizations" of $\Romanbar{X}_t$ are labeled $X_t$
+    \item[$\rightarrow$] You can think of $\Romanbar{X}$ as a multivariate random variable, where components are ordered
+\end{itemize}
+
+Let $\Romanbar{X}$ be a stochastic process.
+
+\bigskip
+
+$\Romanbar{X}$ is \textbf{\underline{strictly stationary}} if the distribution (joint) of $(\Romanbar{X}_t, \Romanbar{X}_{t_2}, ..., \Romanbar{X}_{t_k} $ is invariant to shifts. (Equal to distribution of $(\Romanbar{X}_{t_1+h}, \Romanbar{X}_{t_2+h}, ..., \Romanbar{X}_{t_k+h} $)
+
+\bigskip
+
+Difficult to satisfy \underline{and} verify.
+
+$\Romanbar{X}$ is \textbf{\underline{covariance stationary}} if:
+\begin{itemize}
+    \item The mean function $\mu_t=E[\Romanbar{X}_t]$ is constant (doesn't depend on t)
+    \item The variance function $\sigma^2_t=Var(\Romanbar{X}_t)$ is constant
+    \item The autocovariance function $\gamma(t,s)=Cov(\Romanbar{X}_t,\Romanbar{X}_s)$ depends only on $t-s$
+\end{itemize}
+
+Let $\tau=t-s$ $\Rightarrow \gamma(\tau) = Cov(\Romanbar{X}_t, \Romanbar{X}_s)$ only makes sense if $Cov(\Romanbar{X}_t,\Romanbar{X}_s)=Cov(\Romanbar{X}_{t+1},\Romanbar{X}_{s+1})$, etc.
+
+
+\subsection{The Random Walk}
+
+$\Romanbar{X}_t=\Romanbar{X}_{t-1}+\varepsilon_t$, $\varepsilon_t$ iid.
+\quad Note: Random walk on integer lattice is when $\varepsilon_t \in \{-1,1\}$ 50/50 and sometimes $\Romanbar{X}_0=0$  \\
+
+Mean function: \quad (for the case $\Romanbar{X}_0=0$)
+\begin{align*}
+    \mu_t=E[\Romanbar{X}_t] &= E[\Romanbar{X}_{t-1} + \varepsilon_t]\\
+    &=E[\Romanbar{X}_{t-2}+\varepsilon_{t-1}+\varepsilon_t] \\
+    & \vdots\\
+    &=E[\varepsilon_1+...+\varepsilon_t] \\
+    &=t * E[\varepsilon_1]
+\end{align*}
+\begin{itemize}
+    \item If $E[\varepsilon_1=0]$ (without drift) then $\mu_t=0$ does not depend on t
+    \item If $E[\varepsilon_t\neq 0]$, this is called a random walk with drift
+\end{itemize}
+
+Variance function:
+\begin{align*}
+    \sigma^2=var(\Romanbar{X}_t)&=var(\Romanbar{X}_{t-1} + \varepsilon_t)\\
+    &=var(\Romanbar{X}_{t-2} + \varepsilon_{t-1} + \varepsilon_t) \\
+    &\vdots \\
+    &=var(\varepsilon_1+...+\varepsilon_t)\\
+    &=var(\varepsilon_1)+...+var(\varepsilon_t)\\
+    &=t * var(\varepsilon_t)
+\end{align*}
+\quad  \quad depends on $t$ if $var(\varepsilon_1)\neq 0 \Rightarrow$ not covariance stationary \\
+
+A popular simple model stock prices is that $log(price_t)$ is a random walk
+
+\subsection{The Backshift Operator $B$}
+
+Let $\Romanbar{V}$ be a stochastic process. Then $B\Romanbar{V}$ is another stochastic process with $$(B\Romanbar{V})_t=\Romanbar{V}_{t-1}$$
+
+\begin{itemize}
+    \item More common notation: $B\Romanbar{V}_t=\Romanbar{V}_{t-1}$
+    \item Also called "Lag" operator 
+    \item $B^2\Romanbar{V}_t=B\Romanbar{V}_{t-1}=\Romanbar{V}_{t-2}$, \quad $B^k\Romanbar{V}_t=\Romanbar{V}_{t-k}$
+    \begin{itemize}
+        \item[] Note: Book uses $\Delta$ to be difference operator 
+        \begin{itemize}
+            \item[] $\Delta=1-B$ because: 
+            $$\Delta V_t = V_t-V_{t-1}=V_t-BV_t=(1-B)V_t$$
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\underline{Building a random walk with the backshift operator:}
+\bigskip
+\begin{align*}
+    \Romanbar{X}_t&=\Romanbar{X}_{t-1}+\varepsilon_t\\
+    \Rightarrow \Romanbar{X}_t-\Romanbar{X}_{t-1}=\varepsilon_t\\
+    \Rightarrow(1-B)\Romanbar{X}_t=\varepsilon_t
+\end{align*}
+
+\textbf{Note:} "$1-B$" is not invertible, thus division by $1-B$ not possible
+
+\subsection{Moving Averages}
+
+\begin{align*}
+  \Romanbar{X}_t&=\sum_{i=0}^q \theta_i\varepsilon_{t-i} &&\text{is called a $q$-order moving average. Also called "$MA(q)$"} \\
+  &= \underbrace{(\theta_0+\theta_1B+...+\theta_qB^q)}_{\text{polynomial in $B$ with coefficients $\theta_0...\theta_q$, real numbers usually}}\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\varepsilon_t \\
+  \Romanbar{X}_t&=p(B)\varepsilon_t &&\text{usually rescale $\varepsilon_t$ so that $\theta_0=1$}
+\end{align*}
+
+Basic calculations: Assume $E[\varepsilon_t]=0$. Then $\mu_t=E[\Romanbar{X}_t]=E[\sum_{i=0}^q \theta_i \varepsilon_{t-1}]=\sum_{i=0}^q \theta_i E[\varepsilon_{t-1}]=0 $\\
+$\sigma^2_t=var(\Romanbar{X}_t)=\sum_{i=0}^q \theta_i^2 var(\varepsilon_{t-1}) $
+
+\bigskip
+\textbf{\underline{Invertibility of Moving Averages}}
+\begin{align*}
+    \Romanbar{X}_t&= \sum_{i=0}^q \theta_i\varepsilon_{t-i}\\
+    &=p(B)\varepsilon_t\\
+    &\text{($p(B)$ is the "Lag polynomial" or "Backshift polynomial")}
+\end{align*}
+
+\underline{Theorem}: \quad $\varepsilon_t$ can be written as $\varepsilon_t=q(B)\Romanbar{X}_t$ for some (possibly infinite) lag polynomial $q(B)$ if all roots of $p$ (meaning complex solutions $p(z)=0$) have $|z|>1$, equivalently lie outside the unit circle. \\
+
+\underline{Motivation:} \quad The imposition of an invertibility condition ensures that there is a unique MA process for a given ac.f.
+
+\underline{Example:} \quad In Random Walk:
+\begin{align*}
+    \Romanbar{X}_t&=\Romanbar{X}_{t-1}"\varepsilon_t\\
+    \Rightarrow (1-B)\Romanbar{X}_t&=\varepsilon_t\\
+    \text{If } p(B) &= 1-B \text{, \quad then} \\
+    p(B)\Romanbar{X}_t&=\varepsilon_t
+\end{align*}
+
+The roots of $p(B)$ thought of as a regular polynomial $p(z)$ are $p(z)=1-i$, vanishes at $z=1$.
+\begin{itemize}
+    \item Called unit root because $|z|=1$
+    \item Unit roots $\Rightarrow$ non-Stationarity
+    \begin{itemize}
+        \item[] Know random walk not stationary:
+        \begin{itemize}
+            \item[] $\sigma^2_t=t \cdot var(\varepsilon_1)$
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Autoregressive Process}
+
+$\Romanbar{X}_t$ is an autoregressive process of order $p$ if 
+$$\Romanbar{X}_t=\varphi_0+\varphi_1\Romanbar{X}_{t-1}+\varphi_2\Romanbar{X}_{t-2}+...+\varphi_p\Romanbar{X}_{t-p}+\varepsilon_t$$
+
+\quad can be written as a Lag polynomial applied to $\Romanbar{X}$:
+\begin{align*}
+    q(B)\Romanbar{X}_t&=\varepsilon_t+\varphi_0\\
+    q(B)&=1-\varphi_1\Romanbar{X}_{t-1}-...-\varphi_p\Romanbar{X}_{t-p}
+\end{align*}
+
+\begin{itemize}
+    \item AR(1):
+    \begin{align*}
+        X_t&=\mu_t+\alpha_1 BX_t +\varepsilon_t\\
+        &=\mu+\alpha X_{t-1}+\varepsilon_t
+    \end{align*}
+    \item AR(p): $X_t=\mu+\alpha_1 X_{t-1}+...+\alpha_pX_{t-p}+\varepsilon_t $
+    \item[] Regression of $X$ on its own past
+\end{itemize}
+
+Any AR($p$) process 
+\begin{itemize}
+    \item can be written as a MA($\infty$) process, but there are no easy formulas for the MA coefficients when $p\geq 2$
+    \item is, by definition, invertible
+\end{itemize}
+
+The process is stationary if the roots of the equation \[
+\phi(x)=1-\sum_{i=1}^p \alpha_i x^{i} = 0 \text{\quad where $x$ is potentially complex}
+\] lie outside the unit circle.\\
+
+To find the ac.f. in the stationary case, from $X_t=\sum_{i=1}^p \alpha_i X_{t-i}+Z_t$, where the $\alpha_i$ are constants, we get $\rho(k)=\sum_{i=1}^p \alpha_i\rho(k-i)$ for all $k>0$. This set of equations is called the \textbf{Yule-Walker equations}.\\
+
+The set of Yule-Walker equations has the general solution \[
+\rho(k) = \sum_{i=1}^p A_i\pi_i^{|k|}
+\]
+where the $\{\pi_i\}$ are the roots of the so-called auxiliary equation \[
+y^p - \sum_{i=1}^p \alpha_i y^{p-i}=0
+\]
+The constants $\{A_i\}$ are chosen to satisfy the initial conditions:
+\begin{itemize}
+    \item $\rho(0)=1 \Rightarrow \sum A_i = 1 $
+    \item The first ${p-1}$ Yule-Walker equations provide $(p-1)$ further restrictions on the $\{A_i\}$, using $\rho(0)=1$ and $\rho(k)=\rho(-k)$
+\end{itemize}
+Alternative (but equivalent) condition for stationarity:
+\begin{itemize}
+    \item The roots $\{\pi_i\}$ of the auxiliary equation all statisfy $|\pi_i|<1$
+\end{itemize}
+
+
+\subsection{ARMA(p,q)}
+
+ARMA combines MA and AR processes
+
+\begin{itemize}
+    \item ARMA(1,1): \[
+    X_t = \overbrace{\mu}^{\mathclap{\text{Intercept parameter}}} + 
+    \underbrace{\alpha X_{t-1}}_{\mathclap{\text{Autoregressive component}\phantom{ \quad \quad \quad \quad\quad \quad \quad}}} + 
+    \overbrace{\varepsilon}^{\mathclap{\text{Shock}}} + 
+    \underbrace{\beta \varepsilon_{t-1}}_{\mathclap{\text{Moving average component}}}
+    \]
+    \item ARMA(p,q): \[
+    X_t=\mu+\alpha_1 X_{t-1} +...+\alpha_p X_{t-p}+ \varepsilon_t + \beta_1 \varepsilon_{t-1}+...+ \beta_q \varepsilon_{t-q}
+    \]
+    \begin{itemize}
+        \item[] "Regression on own history and shock history"
+        \item[] Example: \(X_t=\mu+\Phi(B)X_t+\varepsilon_t+\psi(B)\varepsilon_t \)
+    \end{itemize}
+\end{itemize}
+
+The condition for \textbf{stationarity} is that the AR part $\phi(B)$ is stationary.\\
+The condition for \textbf{invertibility} is that the MA part $\theta(B)$ is invertible.
+
+\subsection{ARIMA(p,d,q)}
+
+ARIMA Model for \(\Delta X_t=X_t-X_{t-1}\)
+\begin{itemize}
+    \item[] E.g., \( ARIMA(1,1,1)=\Delta X_t=\mu +\alpha \Delta X_{t-1} + \varepsilon_t + \beta \varepsilon_{t-1} \)
+    \item $ARIMA(p,d,q)$ \quad $d$: number of times $\Delta$ is applied
+\end{itemize}
+
+
+\subsection{Exercise 3}
+\begin{itemize}
+    \item Deriving ac.f. 
+    \begin{enumerate}
+        \item[] $\rho(k)=\frac{Cov(X_\cdot, X_{c\cdot + k})}{Var(X_\cdot)} $
+        \item Calculate $E[X_t]$
+        \item Calculate $E[X_t X_{t+k}] = Cov$
+        \item Calculate $Var(X_t)$
+    \end{enumerate}
+    \item Assessing Stationarity:
+    \begin{itemize}
+        \item Look at the characteristic polynomial of an AR process, if all roots lie outside the unit circle ($|root|>1$) the model is stationary.
+    \end{itemize}
+    \item Assessing Invertibility:
+    \begin{itemize}
+        \item Look at the characteristic polynomial of an MA process, roots again must lie outside the unit circle
+    \end{itemize}
+    \item Reminder: quadratic formula:
+    \begin{align*}
+        \text{If } ax^2 +bx+c=0 \\
+        x=\frac{-b \pm \sqrt{b^2-4ac}}{2a}
+    \end{align*}
+\end{itemize}

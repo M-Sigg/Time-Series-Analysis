@@ -1,0 +1,91 @@
+\underline{\textbf{Definition}}: \quad A \underline{Time Series} is a collection of data observations made sequentially over time.
+
+
+\begin{itemize}
+    \item[] \underline{Examples} (coming from many scientific fields)
+    \begin{itemize}[label=\textbullet]
+        \item Economics (unemployment over time, GNP, gold price, exchange rates, all
+        over time)
+        \item Finance (Stock returns, etc.)
+        \item Geology (temperature, rainfall, snow mass, etc.)
+        \item Etc.  
+    \end{itemize}
+\end{itemize}
+
+Types of Time Series: \quad (Terminology)
+
+\begin{enumerate}
+    \item Continous time series - observed at every point in time
+    \begin{itemize}
+        \item humidity
+        \item etc.
+    \end{itemize}
+    \item Discrete time series
+    \begin{itemize}
+        \item Daily Stock returns
+        \item Quarterly unemployment
+        \item Yearly avalanche deaths
+    \end{itemize}
+\end{enumerate}
+
+Objectives in time series analysis:
+
+\begin{itemize}
+    \item Description 
+    \item Explanation
+    \item Prediction
+    \item Control
+    \item Statistical Inference
+\end{itemize}
+
+\begin{enumerate}[label=\Alph*.]
+    \item \underline{Description}: 
+    \begin{itemize}
+        \item Always start with making a time plot:
+        \begin{itemize}
+            \item time on x-axis 
+            \item observed series value on y-axis
+        \end{itemize}
+        \item Look out for features like:
+        \begin{itemize}
+            \item Trend
+            \item Seasonal variation
+            \item Cyclical variation
+            \item Regime shifts
+            \item Outliers
+        \end{itemize}
+    \end{itemize}
+    \item \underline{Explanation}:
+    \begin{itemize}
+        \item Happens more with a multivariate time series
+        \begin{itemize}
+            \item Example: \quad Unemployment and GDP
+        \end{itemize}
+        \item Can try to explain properties of one time series using the other time series.
+        \item Options:
+        \begin{itemize}
+            \item Linear Regression
+            \item Nonlinear Regression
+            \item Linear Systems analysis
+            \item ...
+        \end{itemize}
+    \end{itemize}
+    \item \underline{Prediction}:
+    \begin{itemize}
+        \item Given a time series with values observed to the present, predict the most likely future values
+        \item Examples:
+        \begin{itemize}
+            \item Weather forecasting
+            \item GDP forecasting
+        \end{itemize}
+    \end{itemize}
+    \item \underline{Control}:
+    \begin{itemize}
+        \item In many applications, can intervene, and change the course of a time series.
+    \end{itemize}
+    \item \underline{Statistical Inference}:
+    \begin{itemize}
+        \item Hypothesis tests or Confidence intervals about parameters or properties of a time series
+        \item Example: \quad Is there statistical evidence to conclude that a given time series contains a linear (non zero) trend?
+    \end{itemize}
+\end{enumerate}

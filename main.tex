@@ -1,0 +1,102 @@
+\documentclass[11pt]{article}
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\parindent 0px % no automatic indentation
+
+\usepackage{amsmath,amssymb,amstext,amsthm,amsfonts}
+\usepackage{float}
+\usepackage[shortlabels]{enumitem}
+\usepackage[a4paper,lmargin={2cm},rmargin={2cm},tmargin={2.5cm},bmargin = {2.5cm},headheight = {4cm}]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xspace}
+\usepackage{empheq}
+\usepackage{mdframed}
+\usepackage{changepage}
+%\usepackage{hanging}
+\usepackage{romanbar}
+\usepackage{mathtools}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{language=R,
+    basicstyle=\ttfamily\small,
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    backgroundcolor=\color{backcolour},
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    frame=single
+}
+
+\usepackage[headsepline]{scrlayer-scrpage} 
+\pagestyle{scrheadings} 
+\usepackage{titling}
+\usepackage{etoolbox}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, calc, automata, arrows.meta, positioning,decorations.pathmorphing,backgrounds,decorations.markings,decorations.pathreplacing, graphs}
+\usepackage{cancel}
+
+\pagestyle{plain}
+
+% MACROS
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+
+\title{Time Series Analysis}
+\author{Michael Sigg}
+\date{\today}
+
+\ohead{\theauthor}
+\ihead{Time Series Analysis, Spring 24}
+
+
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+\input{sections/Introduction}
+
+\section{Simple Descriptive Techniques}
+\input{sections/descriptive}
+
+\section{Linear Time Series Models}
+\input{sections/Processes}
+
+\section{Model Fitting \& Selection}
+\input{sections/Model}
+
+\section{Forecasting}
+\input{sections/forecasting}
+
+\section{Spectral Analysis}
+\input{sections/spectral}
+
+\end{document}

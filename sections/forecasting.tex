@@ -1,0 +1,160 @@
+\underline{Problem:} \quad Observe $X_1, X_2,...,X_T$\\
+\begin{itemize}
+    \item  Want to estimate/predict \quad $X_{T+1}$
+    \item Understand how much margin of error there is for your prediction
+\end{itemize}
+
+\underline{Two main ways}
+\begin{itemize}
+    \item Model Free Methods
+    \item Model Based Methods
+\end{itemize}
+
+
+Summary: \quad Decompose Time Series $X_1,....X_T$ into trend $f(t)$ and s Stationary component $Z_t$. Extrapolate trend. Extrapolate $Z_t$ without or with estimating a time series model, (like ARMA)
+
+\subsection{Linear Model Free Methods}
+
+\underline{Example 1. Exponential Smoothing}
+
+\begin{itemize}
+    \item[] Have $X_1,...,X_T$ in data. Want to predict $X_{T+1}$. Call the prediction $\hat{X}_{T+1}$
+    \item[] Write $\hat{X}_{T+1} $ as a weighted average of $X_1,...,X_T$ with exponentially decaying weights \[
+    \hat{X}_{T+1} = \theta(cX_t+c^2X_{T-1} + c^3X_{T-2}+...+c^TX_1)
+    \] for some $c^t$ with $0<c<1$ and $0<\theta<1$.
+    \item[] Weight that $X_{T-1}$ has is smaller than $X_T$'s weight, etc.
+    \item[] E.g. \[\text{if } c=\frac{1}{2} \]
+    \[\hat{X}_{T+1}=\theta \left(\frac{1}{2}X_T+\frac{1}{4} X_{T-1}+...+(\approx0) X_1 \right)
+    \]
+    \item[] Question: How to choose $\theta$ given $c$?
+    \begin{itemize}
+        \item[] One way is to make sure all weights add to 1:
+        \item[] This makes $\hat{X}_{T+1}$ a "genuine weighted average"
+        \item[] For a choice of $c<1$
+        \[
+        c+c^2+c^3+...+c^T\approx \frac{c}{1-c}
+        \]
+        \item[] $\theta=\frac{1-c}{c}$ 
+    \end{itemize}
+    \item $\hat{X}_{T+1} = \frac{1-c}{c}(cX_T+c^2X_{T-1}+...+c^TX_1) $
+    \item Equivalently,
+    \begin{align*}
+        \hat{X}_{T+1}&= \alpha X_T+\alpha(1-\alpha)X_{T-1}+\alpha(1-\alpha)^2 X_{T-1}+... \text{ with }\alpha=1-c \\
+        \Rightarrow \hat{X}_{T+1}&=\alpha X_T+(1-\alpha)\hat{X}_T \\ &=\alpha\underbrace{(X_T-\hat{X}_T)}_\text{prediction error at time T, call it $= e_T$}+\hat{X}_T \\
+        X_{T+1}&=\alpha e_T + \hat{X}_T \rightarrow \text{ prediction is last time's prediction $+ \alpha *$ prediction error}
+    \end{align*}
+    \item For any number $\alpha$ with $0<\alpha<1$ can generate predictions. Which $\alpha$ is best?
+    \begin{itemize}
+        \item Choose $\alpha$ to minimize a sum of squares criteria: \[min \sum_{T=1}e_t (\alpha)^2\] where $e_t(\alpha)=X_t-(\alpha X_{t-1}+ \alpha(1-\alpha)X_{t-2} ...) $. Here let $e_t(\alpha)$ be the error you would have gotten using $\alpha$ as the smoothing parameter.
+    \end{itemize}
+    \item Extensions to Seasonality and Trend are possible:
+    \begin{itemize}
+        \item Generalize 
+        \begin{align*}
+            \hat{X}_{T+1} &= \alpha e_T+\hat{X}_T\\
+            \text{to (A) } \hat{X}_{T+1}&= \alpha e_T+\hat{X}_T+\gamma(\text{Trend Increment}) \\
+            \text{-or- (B) } \hat{X}_{T+1}&= \alpha e_T+\hat{X}_T+\gamma(\text{Trend Increment}) + \delta(\text{Seasonality})
+        \end{align*}
+        \item use Holt or Holt-Winter procedures respectively. In R there is a package that does this.
+        \begin{itemize}
+            \item[] \textit{Note:} Holt and Holt-Winter are not exactly identical to (A),(B)
+        \end{itemize}
+    \end{itemize}
+    \item To go further out: \quad with Simple Exp. Smoothing\\
+
+    \item \fbox{Want to use Recursion} 
+    \begin{align*}
+        \hat{X}_{T+2} &= \alpha e_{T+1} + \hat{X}_{T+1}\\
+        &= \alpha(X_{T+1}-\hat{X}_{T+1})+\hat{X}_{T+1}
+    \end{align*}
+\end{itemize}
+
+\subsection{Model-Based Prediction}
+
+\begin{itemize}
+    \item Need a model
+\end{itemize}
+
+\underline{Example: \quad $AR(2)$ model-based predictions}
+\begin{itemize}
+    \item If $X_t=\mu +\alpha_1X_{t-1} + \alpha_2 X_{t-2}+\varepsilon_t$, with $\varepsilon$ iid, mean zero.
+    \item If you know $\alpha_1, \alpha_2, \mu$ take \[\hat{X}_{T+1}=\mu +\alpha_1 X_T + \alpha_2 X_{T-1} \]
+    \begin{itemize}
+        \item Plug in time series to model
+    \end{itemize}
+    \item \underline{Properties}
+    \begin{align*}
+        E[\hat{X}_{T+1} | X_T, X_{T-1}] &= E[\mu+\alpha_1 X_T+\alpha_2 X_{T-1} |X_T, X_{T-1}]\\
+        &=E[X_{T+1}-\varepsilon_{T+1} | X_T, X_{T-1}]\\
+        &=E[X_{T+1} | X_T, X_{T-1}]
+    \end{align*}
+    \begin{itemize}
+        \item[] $\Rightarrow$ $\hat{X}_{T+1}$ and $X_{T+1}$ have the same conditional expectations
+    \end{itemize}
+    \item Model-Based Predictions in general ARIMA models is the same. Just plug in earlier estimates.
+\end{itemize}
+
+\underline{Some other examples: $ARMA(1,1)$}
+\[X_t=\mu + \alpha X_{t-1}+\theta \varepsilon_{t-1}+\varepsilon_t \]
+\begin{itemize}
+    \item[] \textit{Note:} here, have an estimate of $\hat{\varepsilon}_{t-1} $ given $X_1,...,X_T$ if you start with assumption $\varepsilon_0=0$
+    \[\hat{X}_{T+1}=\mu +\alpha X_T+\theta \hat{\varepsilon}_T \]
+    \item In practice, you don't know the parameters of the model
+    \begin{itemize}
+        \item In $AR(2)$, don't know $\mu, \alpha_1, \alpha_2$
+        \item IN $ARMA(1,1)$, don't know $\mu,\alpha, \theta $
+    \end{itemize}
+    \item Also, don't know which model is correct.
+\end{itemize}
+
+\underline{Procedure:}
+\begin{itemize}
+    \item Perform model selection, with BIC (or AIC or other) criteria.
+    \item Fit model parameters
+    \item Generate predictions via plug in. 
+    \item Called Box-Jenkins Procedure
+    \item Example: with $AR(1)$
+    \[X_t=\mu+\alpha X_{t-1}+\varepsilon_t \]
+    \begin{itemize}
+        \item Use Max.Likelihood to estimate $\hat{\mu}, \hat{\alpha}$
+        \item Set $\hat{X}_{T+1}= \hat{\mu} + \hat{\alpha}X_T$
+        \item For AR models, recursion is used often for h-Step ahead forecasts
+        \begin{align*}
+            \hat{X}_{T+2} &= \hat{\mu} +\hat{\alpha} \hat{X}_{T+1}\\
+            \hat{X}_{T+3} &= \hat{\mu} +\hat{\alpha} \hat{X}_{T+2}\\
+        \end{align*}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Exercises}
+
+\underline{Book 5.2}: \\
+
+\quad Calculating forecast $\hat{X}_{T+h}$:
+\begin{align*}
+   &\text{Model: } X_t = \alpha X_{T-1} + Z_T \\
+   &\text{Need to show: } E[X_{T+h}|F_T] = \alpha^h X_t \\
+   &\text{\quad where $F_T$ is the information set at time $T$} \\
+   &\text{Insert model: } E[\alpha X_{T+h-1} + Z_{T+h}|F_T] \\
+   &\text{As $Z_{T+h}$ is independent of $F_T$} \\
+   &\text{ \quad and $E[Z_{T+h}]=0$ (white noise process). It drops out} \\
+   &\Rightarrow E[\alpha X_{T+h-1|F_T}] \\
+   &\text{Insert model again: } E[\alpha(\alpha X_{T+h-2} + Z_{T+h-1}) |F_T] \\
+   &\text{Do this iteratively until $X_{T+h-i} = X_T$, i.e., $i=h$} \\
+   &\Rightarrow E[\alpha^h X_T|F_T] \\
+   &\text{As $X_T$ is included in the information set we can take it out:}\\
+   &\Rightarrow \hat{X}_{T+h}= \alpha^h X_T
+\end{align*}
+
+\quad Calculating \textit{$h$-steps-ahead} forecast error ($X_{T+h}-\hat{X}_{T+h}$):
+\begin{align*}
+    & Var(X_{T+h}-\hat{X}_{T+h}) \\
+    &= E[(X_{T+h} - E[X_{T+h}|F_t])^2 ] \\
+    &= E[(\alpha X_{T+h-1} +Z_{T+h} - \alpha^h X_T)^2 ] \\
+    &\text{Iteratively inserting for $X_{T+h-i}$ until $i=h$ }\\
+    &= E[(\bcancel{\alpha^h X_T} + Z_{T+h} +\alpha Z_{T+h-1} + \alpha^2 Z_{T+h-2} ... - \bcancel{\alpha^h X_T} )^2 ]\\
+    &\Rightarrow E\left[\left(\sum_{j=0}^{h-1} \alpha^j Z_{T+h-j} \right)^2 \right] \\
+    &\text{All $Z_t$ are identically distributed, thus: } E \left[ \sigma_z^2 \sum_{j=0}^{h-1} \alpha^{2j}  \right] \\
+    &\text{Geometric Series } \Rightarrow E \left[ \sigma_z^2 \left( \frac{1-\alpha^{2h}}{1-\alpha^2} \right) \right] \\
+    & \Rightarrow \sigma_z^2 \frac{1-\alpha^{2h}}{1-\alpha^2}
+\end{align*}
