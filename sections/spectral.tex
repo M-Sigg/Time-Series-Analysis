@@ -126,3 +126,77 @@ But with Smoothing + the property that
 
 
 \[\Rightarrow \frac{1}{2a} \int_{\omega_0 - a}^{\omega_0 + a} I(\omega)d\omega \approx f(\omega_0) \text{\quad for a small $T$ with high probability.}\]
+
+
+
+\underline{Spectral methods continued}:
+\bigskip
+Let $X_t, t=1,...,T$ be observations from a stationary time series. \\
+
+Two objects:
+\begin{enumerate}
+    \item Spectral density: $f(\omega)=\frac{1}{\pi} \sum_{k=-\infty}^\infty \gamma(k) e^{\omega k \sqrt{-1}}$, where $\gamma(k) = cov(X_t, X_{t-k})$
+    \item Periodogram: $I(\omega) = \frac{1}{\pi T} \left| \sum_{t=1}^T X_t e^{t\omega \sqrt{-1}} \right|^2$
+\end{enumerate}
+
+\underline{Properties}: 
+\begin{itemize}
+    \item $\underset{T\rightarrow\infty}{lim} E\left[I(\omega) \right] = f(\omega)$ 
+    \item $\underset{T\rightarrow\infty}{lim} Var(I(\omega))\neq0$
+    \item "For $\omega_1 \neq \omega_2$, $I(\omega_1)$ and $I(\omega_2)$ become approximately independent for large T
+    \begin{itemize}
+        \item[] $\Rightarrow$ Law of large numbers effect
+        \item[] Smoothed periodogram can estimate $f(\omega)$ 
+    \end{itemize}
+\end{itemize}
+
+\subsection{Variance estimation and inference via periodogram}
+
+\textbf{\underline{Inference problems:}}
+
+\begin{itemize}
+    \item Estimating a mean 
+    \begin{itemize}
+        \item[]$X_t=\mu + \varepsilon_t$
+        \item[] $\hat{\mu}= \frac{1}{T} \sum_{t=1}^T X_t$ 
+    \end{itemize}
+    \item[*] Question: How to compute a confidence interval for $\mu$? 
+    \item A generalization of this problem is: estimate a regression with two time series \[y_t=\alpha+\beta X_t +\varepsilon_t\]
+    \item[] $\rightarrow \hat{\beta}$ via OLS leads to question: How to compute a confidence interval? 
+    \item[*] Answer: \textcolor{red}{ADD answer}
+    \item Why? $X_t = \mu + \varepsilon_t$ $\varepsilon_t$ mean $0$ but possibly dependent.
+    \begin{itemize}
+        \item[] $\hat{\mu}= \frac{1}{T} \sum_{t=1}^T X_t$
+        \begin{align*}
+            var(\hat{\mu}) &= var(\frac{1}{T} \sum_{t=1}^T X_t) \\
+            &= var(\frac{1}{T} \sum_{t=1}^T \varepsilon_t) \\
+            &= \frac{1}{T^2} \sum_{s,t=1}^T cov(\varepsilon_s, \varepsilon_t) \\
+            &\text{Let $\gamma$ be autocovariance function of $\varepsilon_t$} \\
+            &\approx \frac{1}{T^2} \left[ \sum_{s=1}^T cov(\varepsilon_s, \varepsilon_s) + \sum_{s=2}^T cov(\varepsilon_{s}, \varepsilon_{s-1}) +  \sum_{s=2}^T cov(\varepsilon_{s-1}, \varepsilon_{s})  + \sum_{s=3}^T cov(\varepsilon_{s}, \varepsilon_{s-2}) + ...\right] \\
+            &=\frac{1}{T^2} \left[\sum_{s=1}^T \gamma(0) +  \sum_{s=2}^T \gamma(1) + \sum_{s=2}^T \gamma(-1) + \sum_{s=3}^T \gamma(2) + ... \right] \\
+            var(\hat{\mu}) &= \frac{1}{T^2} \left[T\gamma(0) + (T-1)\gamma(1) + (T-1)\gamma(-1) + (T-2)\gamma(2) + ... \right]\\
+            &\approx \frac{1}{T^2} \left[T(\gamma(0)+ \gamma(1)+\gamma(-1)+\gamma(2)+...) \right]\\
+            &= \frac{1}{T} \left[\gamma(0)*1 + \gamma(1)*1+\gamma(-1)*1+\gamma(2)*1 +...\right] \\
+            &= \frac{1}{T} \left[\gamma(0)e^{-0*0*\sqrt{-1}} + \gamma(1) e^{-0*1*\sqrt{-1}} + \gamma(-1) e^{-0*-1*\sqrt{-1}} + \gamma(2) e^{-0*2*\sqrt{-1}}+... \right] \\
+            &=\frac{1}{T} \sum_{k=-\infty}^\infty \gamma(k) e^{-0*k*\sqrt{-1}} \\
+            &= \frac{\pi}{T} f(0) \text{\quad (-or- $f(\omega)$ at $\omega=0$)} \\
+        \end{align*}
+        \item[] \fbox{$\frac{\pi}{T}f(0)$} clearly written
+        \item \textcolor{red}{Rest of this part}
+    \end{itemize}
+\end{itemize}
+
+\underline{Procedure for estimating mean}
+\begin{itemize}
+    \item Have: $X_t = \mu + \varepsilon_t$
+    \item Calculate $\hat{\mu} = \frac{1}{T} \sum_{t=1}^T X_t$
+    \item Know $var(\hat{\mu}) \approx \frac{\pi}{T} f(0)$ where $f(\omega)$ is spectral density of $\varepsilon_t$
+    \item 
+\end{itemize}
+To estimate $var(\hat{\mu})$ from periodogram with $\hat{\varepsilon}_t=X_t-\hat{\mu}$ \[I(\omega)=\frac{1}{\pi T} \left| \sum_{t=1}^T \hat{\varepsilon}_t e^{t\omega \sqrt{-1}} \right|^2 \]
+Choose Smoothing window: h $\rightarrow$ important, difficult in practice \textcolor{red}{REST}\\
+\quad h must be between $0$ and $\pi$
+\begin{align*}
+    \hat{f}(0) &= \frac{1}{h} \int_0^h I(\omega)d\omega \\
+    \hat{var}(\hat{\mu}) = \frac{\pi}{T}\hat{f}(0)
+\end{align*}

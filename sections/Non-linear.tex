@@ -1,0 +1,22 @@
+Technically, no official definition of nonlinear time series, but sometimes, there is an obvious choice for what to call linear or nonlinear. \\
+
+For time series like \[X_t = f(X_{t-1} ... X_{t-p}) + \varepsilon_t \]
+\begin{itemize}
+    \item if $f(X_{t-1} ... X_{t-p})$ is something like $ =\alpha_1 X-{t-1} + ...+ \alpha_p X_{t-p}$ call this linear. Otherwise, nonlinear.
+\end{itemize}
+ARMA models are considered linear by everyone. 
+
+\subsection{Threshold AR models}
+Idea: Glue together two different AR models.\\
+
+Simplest way is depending on value of $X_{t-1}$:
+\begin{subequations}
+\begin{empheq}[left = {X_t=\empheqlbrace}]{align*} 
+    &v_1 + a_1X_{t-1} + \sigma_1 \varepsilon_t &&\text{if $X_{t-1} < r$} \\
+    &v_2 + a_2 X_{t-1} 1 \sigma_2 \varepsilon_t &&\text{if $X_{t-1}\geq r$}
+\end{empheq}
+\end{subequations}
+
+\textcolor{red}{ Graph}
+
+Estimation: Choose a distribution for $\varepsilon_t$ (like $N(0,1)$) and do maximum likelihood. \[\rightarrow \hat{v}_1,\hat{v}_2,\]

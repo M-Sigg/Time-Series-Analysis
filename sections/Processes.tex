@@ -86,10 +86,10 @@ Let $\Romanbar{V}$ be a stochastic process. Then $B\Romanbar{V}$ is another stoc
     \item Also called "Lag" operator 
     \item $B^2\Romanbar{V}_t=B\Romanbar{V}_{t-1}=\Romanbar{V}_{t-2}$, \quad $B^k\Romanbar{V}_t=\Romanbar{V}_{t-k}$
     \begin{itemize}
-        \item[] Note: Book uses $\Delta$ to be difference operator 
+        \item[] Note: Book uses $\nabla$ to be difference operator 
         \begin{itemize}
-            \item[] $\Delta=1-B$ because: 
-            $$\Delta V_t = V_t-V_{t-1}=V_t-BV_t=(1-B)V_t$$
+            \item[] $\nabla=1-B$ because: 
+            $$\nabla V_t = V_t-V_{t-1}=V_t-BV_t=(1-B)V_t$$
         \end{itemize}
     \end{itemize}
 \end{itemize}
@@ -222,12 +222,29 @@ The condition for \textbf{invertibility} is that the MA part $\theta(B)$ is inve
 
 \subsection{ARIMA(p,d,q)}
 
-ARIMA Model for \(\Delta X_t=X_t-X_{t-1}\)
+ARIMA Model for \(\nabla X_t=X_t-X_{t-1}\)
 \begin{itemize}
-    \item[] E.g., \( ARIMA(1,1,1)=\Delta X_t=\mu +\alpha \Delta X_{t-1} + \varepsilon_t + \beta \varepsilon_{t-1} \)
-    \item $ARIMA(p,d,q)$ \quad $d$: number of times $\Delta$ is applied
+    \item[] E.g., \( ARIMA(1,1,1)=\nabla X_t=\mu +\alpha \nabla X_{t-1} + \varepsilon_t + \beta \varepsilon_{t-1} \)
+    \item $ARIMA(p,d,q)$ \quad $d$: number of times $\nabla$ is applied
 \end{itemize}
 
+\subsection{SARIMA}
+
+\[SARIMA(p,d,q) x (P,D,Q)_s\]
+
+In practice, many time series contain a seasonal periodic component, which repeats every $s$ observations. \\
+
+A general multiplicative seasonal ARIMA model (SARIMA) is defined as: \[
+\phi_p(B) \Phi_P(B^s)W_t = \theta_q(B)\Theta_Q(B^s)Z_t 
+\]
+\quad where $B$ denotes the backwards shift operator, $\phi_p, \Phi_P, \theta_q, \Theta_Q$ are polynomials of order $p,P,q,Q$, respectively, $Z_t$ denotes a purely random process and \[ W_t=\nabla^d \nabla^D_s X_t \] denotes the differenced series.
+
+\underline{Example}: $ARIMA(1,0,0)\times(0,1,1)_12$
+\begin{align*}
+    \phi_1(B) \cancel{\Phi_0(B^{12})} \cancel{\nabla^0} \nabla^1_{12} X_t = \cancel{\theta_0(B)}\Theta_1(B^{12})Z_t \\
+    (1-\phi_1 B)(X_t-X_{t-12})=(1+\Theta B^{12})Z_t \\
+    X_t = X_{t-12} + \phi_1(X_{t-1}-X_{t-13}) + Z_t + \Theta_1 Z_{t-12}
+\end{align*}
 
 \subsection{Exercise 3}
 \begin{itemize}

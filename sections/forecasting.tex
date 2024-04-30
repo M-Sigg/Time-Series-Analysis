@@ -53,7 +53,7 @@ Summary: \quad Decompose Time Series $X_1,....X_T$ into trend $f(t)$ and s Stati
         \begin{align*}
             \hat{X}_{T+1} &= \alpha e_T+\hat{X}_T\\
             \text{to (A) } \hat{X}_{T+1}&= \alpha e_T+\hat{X}_T+\gamma(\text{Trend Increment}) \\
-            \text{-or- (B) } \hat{X}_{T+1}&= \alpha e_T+\hat{X}_T+\gamma(\text{Trend Increment}) + \delta(\text{Seasonality})
+            \text{-or- (B) } \hat{X}_{T+1}&= \alpha e_T+\hat{X}_T+\gamma(\text{Trend Increment}) + \nabla(\text{Seasonality})
         \end{align*}
         \item use Holt or Holt-Winter procedures respectively. In R there is a package that does this.
         \begin{itemize}
@@ -152,9 +152,10 @@ Summary: \quad Decompose Time Series $X_1,....X_T$ into trend $f(t)$ and s Stati
     &= E[(X_{T+h} - E[X_{T+h}|F_t])^2 ] \\
     &= E[(\alpha X_{T+h-1} +Z_{T+h} - \alpha^h X_T)^2 ] \\
     &\text{Iteratively inserting for $X_{T+h-i}$ until $i=h$ }\\
-    &= E[(\bcancel{\alpha^h X_T} + Z_{T+h} +\alpha Z_{T+h-1} + \alpha^2 Z_{T+h-2} ... - \bcancel{\alpha^h X_T} )^2 ]\\
+    &= E[(\cancel{\alpha^h X_T} + Z_{T+h} +\alpha Z_{T+h-1} + \alpha^2 Z_{T+h-2} ... - \cancel{\alpha^h X_T} )^2 ]\\
     &\Rightarrow E\left[\left(\sum_{j=0}^{h-1} \alpha^j Z_{T+h-j} \right)^2 \right] \\
     &\text{All $Z_t$ are identically distributed, thus: } E \left[ \sigma_z^2 \sum_{j=0}^{h-1} \alpha^{2j}  \right] \\
     &\text{Geometric Series } \Rightarrow E \left[ \sigma_z^2 \left( \frac{1-\alpha^{2h}}{1-\alpha^2} \right) \right] \\
     & \Rightarrow \sigma_z^2 \frac{1-\alpha^{2h}}{1-\alpha^2}
 \end{align*}
+
