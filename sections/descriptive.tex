@@ -106,7 +106,7 @@ Sometimes, write $\mu_t = \alpha + \beta t$ and assume $E[\varepsilon_t]=0$. Cal
 More general classes of trends:
 \begin{itemize}
     \item Polynomial: 
-    $$X_t=\alpha+\beta t +\gamma t^2 + \delta t^3 + \varepsilon_t$$
+    $$X_t=\alpha+\beta t +\gamma t^2 + \nabla t^3 + \varepsilon_t$$
     \item Geompertz trend:
     $$ X_t = \alpha exp(b\ exp(-ct)) + \varepsilon_t$$, $c>0$
     \item Exponential:
@@ -186,8 +186,8 @@ $\Rightarrow X_{t+1}$ never affects $Sm(X_t)$
 
 \textbf{Differencing}:
 \begin{itemize}
-    \item $Y_t =X_t-X_{t-1} = \Delta X_t$ (first order differencing)
-    \item $Z_t=\Delta Y_t= (X_t-X_{t-1})-(X_{t-1}-X_{t-2})=X_t-2X_{t-1}+X_{t-2}=\Delta^2X_t$ (Second order differencing)
+    \item $Y_t =X_t-X_{t-1} = \nabla X_t$ (first order differencing)
+    \item $Z_t=\nabla Y_t= (X_t-X_{t-1})-(X_{t-1}-X_{t-2})=X_t-2X_{t-1}+X_{t-2}=\nabla^2X_t$ (Second order differencing)
 \end{itemize}
 
 \textbf{Kernel Smoothing}
