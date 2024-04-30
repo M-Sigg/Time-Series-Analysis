@@ -304,7 +304,7 @@ $$r_k=\frac{\sum_{t=1}^{T-k} (X_t-\bar{X})(X_{t+k}-\bar{X})}{\sum_{t=1}^{T} (X_t
 
 \begin{lstlisting}[language=R]
 # In R (status package)
-> acf(x)        #(uses M=10*log_10(T))
+acf(x)        #(uses M=10*log_10(T))
                 #(Horizontal bounds at +- 2/\sqrt(T) )
 \end{lstlisting}
 
