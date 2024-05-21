@@ -3,7 +3,7 @@
 
 \setcounter{secnumdepth}{4}
 
-\parindent 0px % no automatic indentation
+%\parindent 0px % no automatic indentation
 
 \usepackage{amsmath,amssymb,amstext,amsthm,amsfonts}
 \usepackage{float}
@@ -65,7 +65,8 @@
 % MACROS
 \newcommand{\ind}{\perp\!\!\!\!\perp} 
 
-\title{Time Series Analysis}
+\title{Time Series Analysis Lecture Notes}
+
 \author{Michael Sigg}
 \date{\today}
 
@@ -76,7 +77,12 @@
 
 \begin{document}
 \maketitle
+\begin{center}
+    Based on the course materials for the course Time Series Analysis FS24 by Prof. Damian Kozbur and TA Philipp Zhang, and the text book "The Analysis of Time Series: An Introduction with R" by Chris Chatfield and Haipeng Xing.
+\end{center}
 \tableofcontents
+
+\newpage
 
 \section{Introduction}
 \input{sections/Introduction}
@@ -99,6 +105,8 @@
 \section{Non-linear Time Series}
 \input{sections/Non-linear}
 
+\section{Impulse Response Functions and Multivariate Time Series}
+\input{sections/ImpulseResponse}
 
 \newpage
 \section{Time Series Analysis in R}

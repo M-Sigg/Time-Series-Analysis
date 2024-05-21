@@ -105,7 +105,6 @@ When we look at the temperature data, we can observe that there is a linear tren
 
 \subsection{Unemployment Data}
 
-We see looking at the raw data, the trend line and the correlogram, that there is significant correlation at all lags. After detrending the correlogram shows that the trend is somewhat dissappeared, but there is still seasonality.
 
 \begin{figure}[H]
 \centering
@@ -113,6 +112,7 @@ We see looking at the raw data, the trend line and the correlogram, that there i
 \caption{Unemployment}
 \end{figure}
 
+We see looking at the raw data, the trend line and the correlogram, that there is significant correlation at all lags. After detrending the correlogram shows that the trend is somewhat dissappeared, but there is still seasonality.
 
 \subsection{Stock data}
 
@@ -157,7 +157,7 @@ logstock.pacf <- pacf(na.omit(stock$DeltaLogClose), lag.max = 100, main = "Delta
 \caption{NVIDIA Correlograms}
 \end{figure}
 
-We see here that both the acf and the pacf for the differenced data indicates non-stationarity. Taking the log addresses this issue. (Note that the lags that still have significant correlation are expected to appear just by chance. As we have a 95\% CI, out of 100 lags we'd expect around 10 to have significant correlation just by chance). 
+We see here that both the acf and the pacf for the differenced data indicates non-stationarity. Taking the log addresses this issue. (Note that the lags that still have significant correlation are expected to appear just by chance. As we have a 95\% CI, out of 100 lags we'd expect around 5 to have significant correlation just by chance). 
 
 \begin{lstlisting}
 fit.diff <- arima(stock$DeltaClose, c(0,0,0))
