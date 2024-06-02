@@ -1,0 +1,35 @@
+\subsection{Determinant Calculation} \label{Determinant Calculation }
+
+Calculating the determinant of a matrix is a fundamental concept in linear algebra. The determinant is a scalar value that can be computed from the elements of a square matrix and provides important properties about the matrix, such as whether it is invertible.
+
+\subsection*{Steps to Calculate the Determinant}
+
+\subsubsection*{Determinant of a 2x2 Matrix}
+For a $2 \times 2$ matrix:
+\[
+A = \begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+\]
+The determinant, denoted as $\det(A)$ or $|A|$, is calculated as:
+\[
+\det(A) = ad - bc
+\]
+
+\subsubsection*{Determinant of a 3x3 Matrix}
+For a $3 \times 3$ matrix:
+\[
+A = \begin{pmatrix}
+a & b & c \\
+d & e & f \\
+g & h & i
+\end{pmatrix}
+\]
+The determinant is calculated using the rule of Sarrus or cofactor expansion:
+\[
+\det(A) = a(ei - fh) - b(di - fg) + c(dh - eg)
+\]
+
+\subsubsection*{General Case for $n \times n$ Matrix}
+For larger matrices, the determinant can be calculated by cofactor expansion along any row or column. The process involves breaking the determinant into smaller determinants of submatrices.

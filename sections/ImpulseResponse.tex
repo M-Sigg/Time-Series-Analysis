@@ -98,7 +98,6 @@ In ARMA(1,1)
 
 \subsection{Multivariate Time Series}
 
-\rule{\textwidth}{0.4pt}
 \bigskip
 \textbf{\underline{Book: Chapter 13}}\\
 
@@ -150,7 +149,7 @@ see equation (\ref{cross-cov}). In the stationary case, the set of cross-covaria
 It has rather different properties to the (auto)covariance function in univariate time series in that it is not an even function of lag (as explained above), thus we get \[
 \Gamma(k)=\Gamma^T(-k) \quad k=0,\pm1,\pm2,\cdots
 \]
-Given the covariance matrix function, it is easy to standardize any particular element to find the corresponding cross-correlation and hence construct the set of $(m\times m)$ cross-correlation matrices, $R(k)$ for $k=0,\pm1,\pm2,\cdots$, called zje \textbf{correlation matrix function} of the process. Thus the $(i,j)$th element of $R(k)$ is given by 
+Given the covariance matrix function, it is easy to standardize any particular element to find the corresponding cross-correlation and hence construct the set of $(m\times m)$ cross-correlation matrices, $R(k)$ for $k=0,\pm1,\pm2,\cdots$, called the \textbf{correlation matrix function} of the process. Thus the $(i,j)$th element of $R(k)$ is given by 
 \begin{align}
     \rho_{ij}(k)=Corr(X_{it},X_{j,t+k})= \frac{\gamma_{ij}(k)}{\sigma_i \sigma_j}
 \end{align}
@@ -238,10 +237,45 @@ where $B$ denotes the backward shift operator, $I$ is the ($2\times 2$) identity
     \phi_{21}B & \phi_{22}B
 \end{pmatrix}\]
 
-The stationarity of $\mathbf{X}_t$ can be extended from the argument for univariate $X_t$. In particular, the necessary and sufficient condition for stationary of (\ref{vectorForm}) or (\ref{13.13}) is that the roots of the determinant of $I-\Phi B$ lie outside the unit circle. 
+The stationarity of $\mathbf{X}_t$ can be extended from the argument for univariate $X_t$. In particular, the necessary and sufficient condition for stationary of (\ref{vectorForm}) or (\ref{13.13}) is that the roots of the determinant of $I-\Phi B$ lie outside the unit circle. \\
 
-\textcolor{red}{Mathematical reminder: Determinant calculation. And exercise example}
+The Appendix~\ref{Determinant Calculation } provides a refresher on how to calculate the determinant of a matrix.\\
 
+\underline{Example Exercise: (13.1)} \\
+\begin{footnotesize}
+    
+
+\quad Given \begin{align*}
+    X_{1t} &= X_{1,t-1}+0.5X_{2,t-1} + \varepsilon_{1t}\\
+    X_{2t} &= 0.2 X_{1,t-1} + 0.7 X_{2,t-1} + \varepsilon_{2t}
+\end{align*} \quad Is this model stationary and invertible?
+
+\begin{align*}
+    X_t &= \begin{pmatrix}
+        1 & 0.5 \\
+        0.2 & 0.7
+    \end{pmatrix}X_{t-1} + \varepsilon_t \\
+    \Rightarrow &\text{ VAR(1)} \\
+    & \left(I_2 - \begin{pmatrix}
+        1 & 0.5 \\
+        0.2 & 0.7
+    \end{pmatrix}B\right)X_t = \varepsilon_t \\
+    \rightarrow &\text{ det}\left(I_2 - \begin{pmatrix}
+        1 & 0.5 \\
+        0.2 & 0.7
+    \end{pmatrix}x\right) \overset{!}{=} 0 \\
+    &\text{ det}\begin{pmatrix}
+        1-x & -0.5x \\
+        -0.2x & 1-0.7x
+    \end{pmatrix} \\
+    &= (1-x)(1-0.7)-0.1x^2 \\
+    &= 1-1.7x + 0.7x^2 -0.1x^2 \\
+    &= 1-1.7x + 0.6x^2 \overset{!}{=} 0\\
+&\Rightarrow x_1 = \frac{5}{6}, \quad x_2 = 2 \quad \Rightarrow\text{Not stationary}\\
+&\text{ As there is no MA component this process is invertible}
+\end{align*}
+
+\end{footnotesize}
 
 \bigskip
 \noindent
@@ -276,7 +310,47 @@ Given the matrix $\Gamma_0$, describing the contemporaneous covariances of the w
 \] but when $k=0$, we get \[
 \Gamma(0) =\Gamma(-1)\Phi^T + \Sigma_0 =\Gamma(1)^T \Phi^T + \Sigma_0
 \]
-\textcolor{red}{Exercise example}
+
+\underline{Example Exercise: 13.3}\\
+
+\begin{footnotesize}
+Find the covariance matrix function $\Gamma(k)$, and the correlation matrix function $P(k)$ for the VAR(1) model with $\Phi= \begin{pmatrix}
+    0.7 & 0\\
+    0& 0.3
+\end{pmatrix}$, assuming that $\varepsilon_t$ denotes bivariate white noise with covariance matrix $\Gamma_0 = \begin{pmatrix}
+    \sigma_1^2 & 0\\
+    0& \sigma_2^2
+\end{pmatrix}$ at lag zero. \\
+
+\begin{itemize}
+    \item The equations are essentially "independent", i.e., no interactions, also \(\varepsilon_{1t}\) and \(\varepsilon_{2t}\) are uncorrelated.
+    \item Expectation: \(\text{Cov}_K(X_T)\) is diagonal. (Thus $\Phi \Phi'=\Phi^2$)
+\end{itemize}
+\begin{align*}
+    X_t &= \Phi X_{t-1} + \varepsilon_t \\
+\mathbb{E}[X_t X_t'] &= \mathbb{E}[(\Phi X_{t-1} + \varepsilon_t)(\Phi X_{t-1} + \varepsilon_t)']\\
+\mathbb{E}[X_t X_t'] &= \Phi \mathbb{E}[X_{t-1} X_{t-1}'] \Phi' + \Phi \mathbb{E}[X_{t-1} \varepsilon_t'] + \mathbb{E}[\varepsilon_t X_{t-1}'] \Phi' + \mathbb{E}[\varepsilon_t \varepsilon_t']\\
+\text{Since } \mathbb{E}[X_{t-1} \varepsilon_t'] &= 0 \text{ and } \mathbb{E}[\varepsilon_t X_{t-1}'] = 0: \\
+\mathbb{E}[X_t X_t'] &= \Phi E[X_{t-1} X_{t-1}'] \Phi' + \underbrace{E[\varepsilon_t \varepsilon_t']}_{\Gamma_0}\\
+\text{Thus } \underbrace{\mathbb{E}[X_tX_t']}_{\Gamma(0)} &= \Phi^2 \underbrace{\mathbb{E}[X_{t-1}X_{t-1}']}_{\Gamma(0)} + \Gamma_0\\
+\Rightarrow \Gamma(0) &= \Phi^2 \Gamma(0) + \Gamma_0\\
+\Rightarrow \Gamma(0) &= (I- \Phi^2)^{-1} \Gamma_0\\
+&= \left(\begin{pmatrix}
+    1&0\\
+    0&1
+\end{pmatrix} - \begin{pmatrix}
+    0.49 & 0\\
+    0 & 0.09
+\end{pmatrix} \right)^{-1} \Gamma_0 \\
+&= \begin{pmatrix}
+    \frac{\sigma^2_1}{0.51} & 0\\
+    0& \frac{\sigma_2^2}{0.91}
+\end{pmatrix}\\
+ \Gamma(k)&=\Phi^k \Gamma(0)\\
+P(k)&=\Phi^k
+\end{align*}
+\end{footnotesize}
+
 
 \subsubsection{Vector ARMA Models}
 
@@ -413,14 +487,162 @@ X_t = I \varepsilon_t + \Phi B \varepsilon_t + (\Phi B)^2 \varepsilon_t + (\Phi 
 \]
 
 \subsubsection{Structural VAR}
+
+Unlike standard VAR models from before, \textbf{Structural VAR} (SVAR) models incorporate \textbf{contemporaneous} relationships between variables. This means that the model explicitly captures the effect of the current value of one variable on the current value of another. 
+
+Consider a bivariate SVAR model for two time series $Y_{1t}$ and $Y_{2t}$: 
+
+\begin{equation}
+\begin{array}{r@{}l}
+& \left.
+\begin{aligned}
+    Y_{1t} &= a_1 + b_1Y_{2t} + \psi_{11} Y_{1t-1} + \psi_{12} Y_{2t-1} + \varepsilon_{1t} \\
+    Y_{2t} &=  a_1 + b_2 Y_{1t} + \psi_{21} Y_{1t-1} + \psi_{22} Y_{2t-1} + \varepsilon_{2t} \label{structural}
+\end{aligned}
+\right\}
+\end{array}
+\end{equation}
+
+In this model, $Y_{1t}$ and $Y_{2t}$ can influence each other contemporaneously, represented by the coefficients $b_1$ and $b_2$. This setup allows us to understand and model the immediate effects between variables. This is like a system of equations changing over time
+\begin{align*}
+    \text{Let } Z_{1t} &= \psi_{11}Y_{1t-1}+\psi_{12}Y_{2t-1} +\varepsilon_{1t} + a_1 \\
+    Z_{2t} &= \psi_{21} Y_{1t-1} + \psi_{22} Y_{2t-1} + \varepsilon_{2t} + a_2
+\end{align*}
+
+\fbox{$\Rightarrow$ This is like a Model of a moving equilibrium. (moving over $t$)} \\
+
+We can derive the corresponding Reduced Form VAR:
+\begin{align*}
+    Y_{1t} &= \mu_1 + \xi_{11} Y_{1t-1} + \xi_{12} Y_{2t-1} + U_{1t}\\
+    Y_{2t} &= \mu_2 + \xi_{21} Y_{1t-1} + \xi_{22} Y_{2t-1} + U_{2t}
+\end{align*}
+This is simply a VAR model with changed letters. We have no more contemporaneous $Y_{1t}$ or $Y_{2t}$ on the right hand side, the coefficients are now different and residuals are now $U_{t1}$ and $U_{2t}$\\
+
+How does this Reduced Form relate to the Structural Model? 
+
+\begin{align*}
+    \text{Let } Y_t = \begin{pmatrix}
+        Y_{1t} \\
+        Y_{2t}
+    \end{pmatrix},\ U_t = \begin{pmatrix}
+        U_{1t} \\
+        U_{2t}
+    \end{pmatrix},\  \varepsilon_t = \begin{pmatrix}
+        \varepsilon_{1t}\\
+        \varepsilon_{2t}
+    \end{pmatrix} \ etc.
+\end{align*}
+
+\underline{Structural Model}
+\begin{align*}
+    Y_t = a + BY_t + \psi Y_{t-1} + \varepsilon_t \quad \text{where } B=\begin{pmatrix}
+        0 & b_1  
+    \end{pmatrix}
+\end{align*}
+
+In order to relate the two models, we first invert $(I-B)$ from the structural model to get \[
+Y_t = (I-B)^{-1} a + (I-B)^{-1} \psi Y_{t-1}+ (I-B)^{-1}\varepsilon_t
+\]
+This transformation shows that $Y_t$ depends on the past values of $Y_{t-1}$, the structural shocks $\varepsilon_t$, and the coefficients transformed by $(I-B)^{-1}$. The reduced form model is given as $Y_t = \mu + \xi Y_{t-1} + U_t$. To relate this to the structural form, we identify the corresponding terms:
+\begin{itemize}
+    \item $\mu = (I-BI)^{-1} a$
+    \item $\xi = (I-B)^{-1} \psi$
+    \item $U_t = (I-B)^{-1} \varepsilon_t$
+\end{itemize}
+
+This shows that we can translate between the structural and reduced forms using these transformations. However, there is 1 exception: if the matrix $(I-B)$ is not invertible. \\
+
+The entire purpose is to evaluate how independent shocks to $\varepsilon_{1t}$ and $\varepsilon_{2t}$ of (\ref{structural}). The structure is that $\varepsilon_{1t} \perp \varepsilon_{2t}$, i.e., shocks are assumed to be independent. \[
+Cov(\varepsilon_{1t}, \varepsilon_{2t}) = 0
+\]
+However, in the reduced form \[
+Cov(U_{1t},U_{2t})\neq 0
+\] So the reduced form and the structural model have a different number of parameters. We thus need to make further assumptions on how $U_t$ relate to $\varepsilon_t$ to make progress on impulse responses or just for estimating $\psi$ or $a$.\\
+
+For that we have many options, we highlight two here:
+\begin{itemize}
+    \item \textbf{Option 1:} Take a stand on which ($\varepsilon_{1t}$ or $\varepsilon_{2t}$) is first:
+    \begin{itemize}
+        \item If $\varepsilon_{1t}$ is first, then $\varepsilon_{2t}$ does not directly hit $Y_{1t}$ ($\Rightarrow$ Order shocks and exclude $b_1$)
+        \item[] $Y_{1t} = a_1 + 0\cdot Y_{2t} + \cdots + \varepsilon_{1t}$
+        \item[] $Y_{2t} = a_2 + b_2 \cdot Y_{1t} + \cdots + \varepsilon_{2t}$
+        \begin{itemize}
+            \item We can now do recursion (because we set $b_1=0$)
+            \item If Shock $\varepsilon_{1t}$ happens we can directly understand what happens to $Y_{1t}$. Then we can think more easily what happens from subsequent $\varepsilon_{2t}$ shock.
+        \end{itemize}
+        \item \underline{Example:} Currencies
+        \begin{itemize}
+            \item For instance, in a bivariate model of USD and CHF exchange rates, a shock to the USD will immediately affect the CHF, but a shock to the CHF might take time to impact USD. The order of shocks helps identify immediate and lagged responses accurately 
+        \end{itemize}
+        \item But now we have to order the shocks to identify IRFs (How? I guess from economic theory)
+        \begin{itemize}
+            \item How many parameters are there?
+            \begin{itemize}
+                \item In structural: 9 in total (with $b_1 = 0$ and $Cov(\varepsilon_{1t},\varepsilon_{2t}=0$ restrictions)
+                \item In reduced form: also 9 total
+                \item $\Rightarrow$ same amount of information in the structural and reduced form models
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Option 2:} Long-run restrictions:
+    \begin{itemize}
+        \item Model: $\begin{pmatrix}
+            \Delta Y_t \\
+            U_t
+        \end{pmatrix}$ is stationary + shocks one $\begin{pmatrix}
+            e_d \\
+            e_s
+        \end{pmatrix}$
+        \begin{itemize}
+            \item $s_0: e_d \perp e_s$ and $e_d$ shocks $\Delta Y_t$, $e_s$ shocks $U_t$
+        \end{itemize}
+        \item Restriction: In the long run, $e_d$ has no effect on $Y_t$ itself (not differenced) 
+        \item Blanchard \& Quad (1986):
+        \begin{itemize}
+            \item Model $\begin{pmatrix}
+                \Delta Y_t \\
+                U_t
+            \end{pmatrix}$
+            \begin{itemize}
+                \item where $Y_t$ is output GNP
+                \item where $U_t$ is unemployment
+            \end{itemize}
+            \item In MA representation: 
+            \begin{align*}
+                \begin{pmatrix}
+                    \Delta Y_t \\
+                    U_t
+                \end{pmatrix} &= \Theta_0 \begin{pmatrix}
+                    e_{d_t} \\
+                    e_{s_t}
+                \end{pmatrix} + \Theta_1 \begin{pmatrix}
+                    e_{d_{t-1}} \\
+                    e_{s_{t-1}}
+                \end{pmatrix} + \Theta_2 \begin{pmatrix}
+                    e_{d_{t-2}}\\
+                    e_{s_{t-2}}
+                \end{pmatrix} + \cdots \\
+                \text{Then } &\sum_{i=1}^\infty \left[ \Theta_i \right]_{11} = 0_0 \Rightarrow \text{Identification too}
+            \end{align*}
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\fbox{Key Point: Cannot estimate a structural VAR without at least one economic assumption!}
+
+
+\rule{\textwidth}{0.4pt}
+\textbf{LECTURE}
+
+
 \begin{itemize}
     \item A class of Models for Multivariate Time Series 
 \end{itemize}
 
 Think about a 2-variate time series: 
 \begin{align*}
-    Y_{1t} &= a_1 + b_1y_{2t} + \psi_{11} Y_{1t-1} + \psi_{12} Y_{2t-1} + \varepsilon_{1t} \\
-    Y_{2t} &=  a_1 + b_2 y_{1t} + \psi_{21} Y_{1t-1} + \psi_{22} Y_{2t-1} + \varepsilon_{2t}
+    Y_{1t} &= a_1 + b_1Y_{2t} + \psi_{11} Y_{1,t-1} + \psi_{12} Y_{2,t-1} + \varepsilon_{1t} \\
+    Y_{2t} &=  a_1 + b_2Y_{1t} + \psi_{21} Y_{1,t-1} + \psi_{22} Y_{2,t-1} + \varepsilon_{2t}
 \end{align*}
 What is different here, relative to all previous time series models we saw?\\
 
@@ -442,7 +664,7 @@ How to proceed: \\
 
 Corresponding Reduced Form VAR is:
 \begin{align*}
-    Y_{1t} &= \mu_1 + \xi_{11} + Y_{1t-1} + \xi_{12} Y_{2t-1} + U_{1t}\\
+    Y_{1t} &= \mu_1 + \xi_{11} Y_{1t-1} + \xi_{12} Y_{2t-1} + U_{1t}\\
     Y_{2t} &= \mu_2 + \xi_{21} Y_{1t-1} + \xi_{22} Y_{2t-1} + U_{2t}
 \end{align*}
 This is a VAR model with changed letters 
