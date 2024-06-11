@@ -98,7 +98,7 @@ In ARMA(1,1)
 
 \subsection{Multivariate Time Series}
 
-\bigskip
+
 \textbf{\underline{Book: Chapter 13}}\\
 
 Observations are often taken simultaneously on two or more time series. For such multivariate data, it may be helpful to develop a multivariate model to describe the interrelationships among the series. However, the model-building process is much more difficult than for univariate models. Multivariate models are more vulnerable to misspecification, this emphasizes the importance of getting sufficient background information so as to understand the context and identify all relevant variables before starting the modelling process. An iterative approach to model building is generally required. With multivariate time series data, the modelling process is complicated by the need to model the serial dependence \textit{within} each series, as well as the interdependence \textit{between} series. Multivariate forecasts are not always as good as might be expected.\\
@@ -107,8 +107,7 @@ One basic question is whether the model should involve a single equation or mult
 
 When the 'outputs' affect the 'inputs' there is \textbf{feedback} in a \textbf{closed-loop} system, e.g., wages and prices in a simultaneous equation model. \\
 
-\bigskip
-\noindent
+
 \textbf{\underline{Cross-correlation function}}\\
 
 A key tool in modelling multivariate time series is the cross-correlation function. First, look at the bivariate case and the \textbf{cross-variance function} of two time series at the same unit interval and over the same period $(x_1,y_1), \cdots, (x_N, y_N)$, which is defined as \begin{align}
@@ -179,7 +178,7 @@ and the \textbf{sample cross-correlation coefficient} is given by
 
 Vector Autoregressive Models (VAR) are arguably the most important class of models for \textbf{multiple time-series modelling}.\\
 
-\bigskip
+
 \noindent
 \textbf{\underline{VAR(1) models}}\\
 
@@ -277,7 +276,7 @@ The Appendix~\ref{Determinant Calculation } provides a refresher on how to calcu
 
 \end{footnotesize}
 
-\bigskip
+
 \noindent
 \textbf{\underline{VAR(p) models}}\\
 
@@ -375,7 +374,7 @@ The VAR model may be generalized to include moving average (MA) terms. Building 
 
 
 
-\bigskip
+
 \noindent
 \textbf{\underline{Lecture:}}\\
 
@@ -503,13 +502,29 @@ Consider a bivariate SVAR model for two time series $Y_{1t}$ and $Y_{2t}$:
 \end{array}
 \end{equation}
 
-In this model, $Y_{1t}$ and $Y_{2t}$ can influence each other contemporaneously, represented by the coefficients $b_1$ and $b_2$. This setup allows us to understand and model the immediate effects between variables. This is like a system of equations changing over time
+In this model, $Y_{1t}$ and $Y_{2t}$ can influence each other contemporaneously, represented by the coefficients $b_1$ and $b_2$. This setup allows us to understand and model the immediate effects between variables. This is like a system of equations changing over time. \\
+
+Let
 \begin{align*}
-    \text{Let } Z_{1t} &= \psi_{11}Y_{1t-1}+\psi_{12}Y_{2t-1} +\varepsilon_{1t} + a_1 \\
+    Z_{1t} &= \psi_{11}Y_{1t-1}+\psi_{12}Y_{2t-1} +\varepsilon_{1t} + a_1 \\
     Z_{2t} &= \psi_{21} Y_{1t-1} + \psi_{22} Y_{2t-1} + \varepsilon_{2t} + a_2
 \end{align*}
+$\Rightarrow$ System 
+\begin{subequations}
+    \begin{empheq}[box=\fbox]{align*}
+    Y_{1t} &= b_1 Y_{2t} + Z_{1t} \\
+    Y_{2t}&=b_2 Y_{1t} + Z_{2t}
+    \end{empheq}
+\end{subequations}
 
 \fbox{$\Rightarrow$ This is like a Model of a moving equilibrium. (moving over $t$)} \\
+
+At each $t$, given $Z_{1t},Z_{2t}$, solve a system to get $Y_{1t}, Y_{2t} $
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/Screenshot 2024-06-08 at 09.12.16.jpg}
+\end{figure}
 
 We can derive the corresponding Reduced Form VAR:
 \begin{align*}
@@ -539,6 +554,12 @@ How does this Reduced Form relate to the Structural Model?
         0 & b_1  
     \end{pmatrix}
 \end{align*}
+
+\underline{Reduced Form Model}
+\begin{align*}
+    Y_t=\mu + \xi Y_{t-1} + U_t
+\end{align*}
+
 
 In order to relate the two models, we first invert $(I-B)$ from the structural model to get \[
 Y_t = (I-B)^{-1} a + (I-B)^{-1} \psi Y_{t-1}+ (I-B)^{-1}\varepsilon_t
@@ -630,174 +651,3 @@ For that we have many options, we highlight two here:
 
 \fbox{Key Point: Cannot estimate a structural VAR without at least one economic assumption!}
 
-
-\rule{\textwidth}{0.4pt}
-\textbf{LECTURE}
-
-
-\begin{itemize}
-    \item A class of Models for Multivariate Time Series 
-\end{itemize}
-
-Think about a 2-variate time series: 
-\begin{align*}
-    Y_{1t} &= a_1 + b_1Y_{2t} + \psi_{11} Y_{1,t-1} + \psi_{12} Y_{2,t-1} + \varepsilon_{1t} \\
-    Y_{2t} &=  a_1 + b_2Y_{1t} + \psi_{21} Y_{1,t-1} + \psi_{22} Y_{2,t-1} + \varepsilon_{2t}
-\end{align*}
-What is different here, relative to all previous time series models we saw?\\
-
-Contemporaneous $Y$s can be seen on the right hand side (e.g., $\dots +b_1 Y_{2t}+ \cdots$ note that the '$t$' instead of '$t-1$')\\
-
-This is like a system of equations changing over time.  
-\begin{align*}
-    \text{Let } Z_{1t} &= \psi_{11}Y_{1t-1}+\psi_{12}Y_{2t-1} +\varepsilon_{1t} + a_1 \\
-    Z_{2t} &= \psi_{21} Y_{1t-1} + \psi_{22} Y_{2t-1} + \varepsilon_{2t} + a_2
-\end{align*}
-\textcolor{red}{ REST !!!}\\
-
-Solve a system to get $Y_{1t}, Y_{2t} $
-\textcolor{red}{GRAPH} \\
-
-\fbox{$\Rightarrow$ This is like a Model of a moving equilibrium. (moving over $t$)} \\
-
-How to proceed: \\
-
-Corresponding Reduced Form VAR is:
-\begin{align*}
-    Y_{1t} &= \mu_1 + \xi_{11} Y_{1t-1} + \xi_{12} Y_{2t-1} + U_{1t}\\
-    Y_{2t} &= \mu_2 + \xi_{21} Y_{1t-1} + \xi_{22} Y_{2t-1} + U_{2t}
-\end{align*}
-This is a VAR model with changed letters 
-\begin{itemize}
-    \item no contemporaneous $Y_{1t}$ or $Y_{2t}$ on the right hand side
-    \item Coefficients are different
-    \item Residuals are $U_{1t}$ and $U_{2t}$ now
-\end{itemize}
-How does the reduced form relate to the structural model? 
-\begin{align*}
-    \text{Let } Y_t = \begin{pmatrix}
-        Y_{1t} \\
-        Y_{2t}
-    \end{pmatrix},\ U_t = \begin{pmatrix}
-        U_{1t} \\
-        U_{2t}
-    \end{pmatrix},\  \varepsilon_t = \begin{pmatrix}
-        \varepsilon_{1t}\\
-        \varepsilon_{2t}
-    \end{pmatrix} \ etc.
-\end{align*}
-
-\underline{Structural Model}
-\begin{align*}
-    Y_t = a + B_{Y_t} + \psi_{Y_{t-1}} + \varepsilon_t \quad \text{where } B=\begin{pmatrix}
-        0 & b_1  
-    \end{pmatrix}
-\end{align*}
-\textcolor{red}{RESST}\\
-
-Can relate the two models by inverting $I-B$ like follows:\\
-
-Note: in Structural Model \begin{align*}
-    (I-B)_{Y_t} &= a + \psi_{Y_{t-1}} + \varepsilon_t \\
-    \Rightarrow Y_t &= (I-B)^{-1} a + (I-B)^{-1} \psi_{Y_{t-1}}+ (I-B)^{-1}\varepsilon_t \\
-    \text{plug in Reduced Form} \\
-    Y_t&= \mu+ \xi_{Y_{t-1}}+ U_t \\
-    \Rightarrow \mu&= (I-B)^{-1}a,\ \xi= (I-B)^{-1} \psi_{Y_{t-1}} \\
-    \mu &= (I-B)^{-1} \varepsilon_t
-\end{align*}
-
-$\Rightarrow$ Can go back and forth via this dictionary. \underline{With 1 exception!}\\
-
-
-In structural model: 
-\begin{align*}
-    Y_{1t} &= a_1 + b_1 Y_{2t} + \cdots + \varepsilon_{1t} \\
-    Y_{2t} &= a_2 + b_2 Y_{1t} + \cdots + \varepsilon_{2t}
-\end{align*}
-The entire purpose is to evaluate independent shocks to $\varepsilon_{1t}$ and $\varepsilon_{2t}$ \\
-So \underline{structure} is that $\varepsilon_{1t} \perp \varepsilon_{2t}$ (Shocks are assumed independent) \[
-Cov(\varepsilon_{1t}, \varepsilon_{2t}) = 0
-\]
-Problem: in Reduced Form model, \[
-Cov(U_{1t}, U_{2t}) \neq 0
-\]
-So reduced form and structural models have different number of parameters. \\
-
-Need to make further assumptions on how $U_t$ relate to $\varepsilon_t$ to make progress on impulse responses or just estimating $\psi,a$. \\
-
-\noindent
-\underline{Many options:}
-\begin{itemize}
-    \item Option 1: Take a stand on which ($\varepsilon_{1t}$ or $\varepsilon_{2t}$) is first in the following way:
-    \begin{itemize}
-        \item If $\varepsilon_{1t}$ is first, then $\varepsilon_{2t}$ does not directly hit $Y_{1t}$ (Order shocks and exclude $b_1$)
-        \item[] $Y_{1t} = a_1 + 0\cdot Y_{2t} + \cdots + \varepsilon_{1t}$
-        \item[] $Y_{2t} = a_2 + b_2 \cdot Y_{1t} + \cdots + \varepsilon_{2t}$
-        \begin{itemize}
-            \item Can now do recursion (because we set $b_1=0$)
-            \item If Shock $\varepsilon_{1t}$, understand directly what happens to $Y_{1t}$. Then can more easily think what happens from subsequent $\varepsilon_{2t}$ shock.
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
-
-\noindent
-\underline{Example:} \quad Currencies \\
-with bivariate USD + CHF value (versus some numerair, in case you decide against USD) \\
-Shocks to USD will immediately affect CHF. But shocks to CHF might take time to hit USD. \\
-
-Have to order the shocks to identify IRFs (in option 1). \\
-
-Note: How many params: 
-\begin{itemize}
-    \item In structural 9 total with $b_1=0$ and $Cov(\varepsilon_{1t}, \varepsilon_{2t})=0$ restrictions
-    \item In reduced form: also 9 total model
-\end{itemize}
-$\Rightarrow$ Same amount of info in structural and reduced form 
-
-\begin{itemize}
-    \item Option 2: Long run restrictions. 
-    \begin{itemize}
-        \item Model: $\begin{pmatrix}
-            \Delta Y_t \\
-            U_t
-        \end{pmatrix}$ is stationary + shocks one $\begin{pmatrix}
-            e_d \\
-            e_s
-        \end{pmatrix}$
-        \begin{itemize}
-            \item $s_0: e_d \perp e_s$ and $e_d$ shocks $\Delta Y_t$, $e_s$ shocks $U_t$
-        \end{itemize}
-        \item Restriction: In the long run, $e_d$ has no effect on $Y_t$ itself (not differenced) 
-    \end{itemize}
-\end{itemize}
-
-Blanchard + Quad 1986: 
-\begin{itemize}
-    \item Model $\begin{pmatrix}
-        \Delta Y_t \\
-        U_t
-    \end{pmatrix}$
-    \begin{itemize}
-        \item where $Y_t$ is output GNP
-        \item where $U_t$ is unemployment
-    \end{itemize}
-    \item In MA representation: 
-    \begin{align*}
-        \begin{pmatrix}
-            \Delta Y_t \\
-            U_t
-        \end{pmatrix} &= \Theta_0 \begin{pmatrix}
-            e_{d_t} \\
-            e_{s_t}
-        \end{pmatrix} + \Theta_1 \begin{pmatrix}
-            e_{d_{t-1}} \\
-            e_{s_{t-1}}
-        \end{pmatrix} + \Theta_2 \begin{pmatrix}
-            e_{d_{t-2}}\\
-            e_{s_{t-2}}
-        \end{pmatrix} + \cdots \\
-        \text{Then } &\sum_{i=1}^\infty \left[ \Theta_i \right]_{11} = 0_0 \Rightarrow \text{Identification too}
-    \end{align*}
-\end{itemize}
-
-\fbox{Key Point: Cannot estimate a structural VAR without at least one economic assumption!}

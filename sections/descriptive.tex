@@ -11,7 +11,6 @@ However, in time series analysis, it is essential to describe \underline{types o
     \item Size of other irregular fluctuations
 \end{itemize}
 
-\bigskip
 \underline{Trend}: 
 \begin{itemize}
     \item[] Suppose data is denoted $x_1,...,x_t,...,x_T$ where:
@@ -226,55 +225,41 @@ Other procedures are available too, used by e.g., US Census Bureau:
 
 \textbf{Goal}: Come up with a method for measuring dependence between observations across time.\\
 
-Remember the definition of sample correlation of two random variables $\Romanbar{X}$ and $\Romanbar{Y}$ with data $(X_1,Y_1), ..., (X_T,Y_T)$
-\begin{align*}
-    r&=\frac{\sum_{t=1}^T (X_t-\bar{X})(Y_t-\bar{Y})}{\sqrt{\sum_{t=1}^T (X_t-\bar{X})^2 \times \sum_{t=1}^T (Y_t-\bar{Y})^2}} \\
-    \bar{X}&= \frac{1}{T} \sum_{t=1}^T X_t &&= \text{average}(\Romanbar{X}) \\
-    \bar{Y} &= \frac{1}{T} \sum_{t=1}^T Y_t &&= \text{average}(\Romanbar{Y})
-\end{align*}
-If $X_t=Y_t$? Then $r=1$\\
+\subsubsection{Autocovariance Function}
 
+The \textbf{autocovariance function (acv.f.)} measures the covariance between a time series and a lagged version of itself. For a time series $\{X_t\}$, the autocovariance function $\gamma(k)$ at lag $k$ is defined as:
+\begin{align}
+    \gamma(k)=Cov(X_t,X_{t+k})=\mathbb{E}\left[(X_t-\mu)(X_{t+k} -\mu) \right]
+\end{align}
+where $\mu$ is the mean of the time series.\\
 
-
-
-Apply correlation idea to lags of time series
+Key properties of the acv.f. include:
 \begin{itemize}
-    \item For example, let $(X_t, Y_t)=(X_t, X_{t-1})$
-    \item Warning: this only measures "linear dependence"
+    \item $\gamma(0)$ is the variance of the time series
+    \item $\gamma(k)=\gamma(-k)$ for all $k$ (i.e., the acv.f. is symmetric)
 \end{itemize}
 
+\subsubsection{Autocorrelation Function}
 
-Define:
-\begin{align*}
-        r&=\frac{\sum_{t=1}^{T-1} (X_t-\bar{X}_{(1)})(X_{t+1}-\bar{X}_{(2)})}{\sqrt{\sum_{t=1}^{T-1} (X_t-\bar{X}_{(1)})^2 \times \sum_{t=1}^{T-1} (X_{t+1}-\bar{X}_{(2)})^2}} \\
-        \bar{X}_{(1)} &= \sum_{t=1}^{T-1} \frac{X_t}{T-1} \\
-        \bar{X}_{(2)} &= \sum_{t=1}^{T-1} \frac{X_{t+1}}{T-1} 
-\end{align*}
+The \textbf{autocorrelation function (ac.f.)} measures the correlation between a time series and a lagged version of itself, normalizing the autocovariance function to ensure it lies between -1 and 1. The autocorrelation function $\rho(k)$ is defined as:
+\begin{align}
+    \rho(k)= \frac{\gamma(k)}{\gamma(0)}=\frac{\mathbb{E}[(X_t-\mu)(X_{t+k}-\mu)]}{\mathbb{E}[(X_t-\mu)^2]}
+\end{align}
 
-Most researchers use approximation $\bar{X}_{(1)} \approx \bar{X}_{(2)} \approx \bar{X} $ and terms in the denominator are approximately equal. This gives 
-\[r_1=\frac{\sum_{t=1}^{T-1} (X_t-\bar{X})(X_{t+1}-\bar{X})}{\sum_{t=1}^{T} (X_t-\bar{X})^2}\]
+For a sample of size $T$, the sample autocorrelation function $r_k$ at lag $k$ is calculated as:
 
-Terminology for $_1$:
-\begin{itemize}
-    \item Sample autocorrelation of lag 1
-    \item First order autocorrelation coefficient
-    \item Usage of terminology is author dependent
-\end{itemize}
+\begin{align}
+    r_k=\frac{\sum_{t=1}^{T-k} (X_t-\bar{X})(X_{t+k}-\bar{X})}{\sum_{t=1}^{T} (X_t-\bar{X})^2}
+\end{align}
+where $\Bar{X}$ is the sample mean of the time series.
 
-For larger lags, let $k>0$ be an integer lag:
-\[r_k=\frac{\sum_{t=1}^{T-k} (X_t-\bar{X})(X_{t+k}-\bar{X})}{\sum_{t=1}^{T} (X_t-\bar{X})^2}\]
-
-\begin{itemize}
-    \item $k$-th order autocorrelation coefficient
-    \item Caution: Really only used for stationary time series
-\end{itemize}
 
 \textbf{Exc. 2.4 (Book)}: With a truly random process (under the assumption of a Gaussian white noise process) it is expected that the sample autocorrelation coefficient fall inside the C.I. that is given as: $\pm z\times \sqrt{\frac{1}{N}}$. (Note: in a random process it is normal to find some coefficient to fall just outside the C.I.)\\
 
 
-\textbf{\underline{Correlogram}}: \\
+\subsubsection{Correlogram}
 
-A plot of autocorrelation coefficients.
+A \textbf{correlogram} is a plot of the sample autocorrelation function values $r_k$ against the lag $k$. It is used to visualize the autocorrelation structure of a time series.
 
 \begin{itemize}
     \item Choose a number $M<T$. E.g., if $T=200$, $M=30$ might be used
@@ -286,7 +271,13 @@ acf(x)        #(uses M=10*log_10(T))
                 #(Horizontal bounds at +- 2/\sqrt(T) )
 \end{lstlisting}
 
-Example:
+\textbf{Interpreting the Correlogram:}
+\begin{itemize}
+    \item If the series is white noise, the autocorrelation should be close to zero for all lags.
+    \item Significant autocorrelation at non-zero lags indicate a possible underlying structure in the time series.
+\end{itemize}
+
+\textbf{Example:}
 
 \begin{figure}[H]
 \includegraphics[scale=0.4]{images/Screenshot 2024-03-30 at 17.42.36.jpg}
@@ -310,5 +301,10 @@ Example:
   \end{minipage}
 \end{figure}
 
-
+The three main reasons for making a transformation are:
+\begin{enumerate}[label=(\roman*)]
+    \item To stabilize the variance
+    \item To make the seasonal effect additive
+    \item To make the data normally distributed
+\end{enumerate}
 

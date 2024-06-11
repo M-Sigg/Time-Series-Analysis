@@ -43,7 +43,7 @@ $\Romanbar{X}$ is \textbf{\underline{covariance stationary}} if:
 
 Let $\tau=t-s$ $\Rightarrow \gamma(\tau) = Cov(\Romanbar{X}_t, \Romanbar{X}_s)$ only makes sense if $Cov(\Romanbar{X}_t,\Romanbar{X}_s)=Cov(\Romanbar{X}_{t+1},\Romanbar{X}_{s+1})$, etc.\\
 
-$\Romanbar{X}$ is \textbf{\underline{weakly stationary}} (also known as second-order stationarity) if it satisfies the conditions of both mean stationarity and covariance stationarity.
+$\Romanbar{X}$ is \textbf{\underline{weakly stationary}} (also known as \textbf{\underline{second-order stationarity}}) if it satisfies the conditions of both mean stationarity and covariance stationarity.
 
 \subsection{The Random Walk}
 
@@ -126,11 +126,11 @@ $p(B)$ is the "Lag polynomial" or "Backshift polynomial"\\
 
 \textbf{Theorem}: $\varepsilon_t$ can be written as $\varepsilon_t=q(B)\Romanbar{X}_t$ for some (possibly infinite) lag polynomial $q(B)$ if all roots of $p$ (i.e., meaning complex solutions to $p(z)=0$) have $|z|>1$, equivalently lie outside the unit circle. \\
 
-\textbf{Motivation}: The imposition of an invertibility condition ensures that there is a unique MA process for a given ac.f.
+\textbf{Motivation}: The imposition of an invertibility condition ensures that there is a unique MA process for a given ac.f.\\ 
 
-\textbf{Example:} In Random Walk:
+\textbf{Example:} In Random Walk (AR process):
 \begin{align*}
-    \Romanbar{X}_t&=\Romanbar{X}_{t-1}"\varepsilon_t\\
+    \Romanbar{X}_t&=\Romanbar{X}_{t-1}+\varepsilon_t\\
     \Rightarrow (1-B)\Romanbar{X}_t&=\varepsilon_t
 \end{align*}
 If $p(B) = 1-B$, then:
@@ -145,6 +145,8 @@ The roots of $p(B)$ thought of as a regular polynomial $p(z)$ are $p(z)=1-z$, wh
 \end{itemize}
  Know random walk is not stationary:
 \[\sigma^2_t=t \cdot var(\varepsilon_1)\]
+
+\textbf{Note:} Finite-order MA processes are always stationary, but not necessarily invertible. Infinite-order MA processes however, can be non-stationary (see. exc. 3.3)
 
 \subsection{Autoregressive Process}
 
@@ -231,7 +233,7 @@ ARIMA Model for \(\nabla X_t=X_t-X_{t-1}\)
 
 \subsection{SARIMA}
 
-\[SARIMA(p,d,q) x (P,D,Q)_s\]
+\[SARIMA(p,d,q) \times (P,D,Q)_s\]
 
 In practice, many time series contain a seasonal periodic component, which repeats every $s$ observations. \\
 
@@ -240,7 +242,7 @@ A general multiplicative seasonal ARIMA model (SARIMA) is defined as: \[
 \]
 where $B$ denotes the backwards shift operator, $\phi_p, \Phi_P, \theta_q, \Theta_Q$ are polynomials of order $p,P,q,Q$, respectively, $Z_t$ denotes a purely random process and \[ W_t=\nabla^d \nabla^D_s X_t \] denotes the differenced series.
 
-\textbf{Example}: $ARIMA(1,0,0)\times(0,1,1)_12$
+\textbf{Example}: $SARIMA(1,0,0)\times(0,1,1)_{12}$
 \begin{align*}
     \phi_1(B) \cancel{\Phi_0(B^{12})} \cancel{\nabla^0} \nabla^1_{12} X_t = \cancel{\theta_0(B)}\Theta_1(B^{12})Z_t \\
     (1-\phi_1 B)(X_t-X_{t-12})=(1+\Theta B^{12})Z_t \\

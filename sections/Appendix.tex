@@ -1,3 +1,18 @@
+\subsection{Arithmetic Series}
+General Formula: \[
+S_n=\frac{n(a_1 + a_n)}{2}
+\]
+
+\subsection{Geometric Series}
+Given an integer $n_0$ and a real number $0<a \neq 1$:
+\begin{align*}
+    \sum_{i=0}^n a^{i} = 1 + a + a^2 + \cdots +a^n = \frac{1-a^{n+1}}{1-a} \label{GEOSeries}
+\end{align*}
+Given an integer $n_0$ and a real number $|a|<1$:
+\begin{align*}
+    \sum_{i=0}^\infty a^{i} = \frac{1}{1-a}
+\end{align*}
+
 \subsection{Determinant Calculation} \label{Determinant Calculation }
 
 Calculating the determinant of a matrix is a fundamental concept in linear algebra. The determinant is a scalar value that can be computed from the elements of a square matrix and provides important properties about the matrix, such as whether it is invertible.
@@ -28,8 +43,87 @@ g & h & i
 \]
 The determinant is calculated using the rule of Sarrus or cofactor expansion:
 \[
-\det(A) = a(ei - fh) - b(di - fg) + c(dh - eg)
+\det(A) = a(ei - fh) - b(di - fg) + c(dh - eg)-ö
 \]
 
 \subsubsection*{General Case for $n \times n$ Matrix}
 For larger matrices, the determinant can be calculated by cofactor expansion along any row or column. The process involves breaking the determinant into smaller determinants of submatrices.
+
+
+\subsection{Maximum Likelihood Estimation (MLE)}
+
+Maximum Likelihood Estimation (MLE) is a method for estimating the parameters of a statistical model. The main idea is to find the parameter values that maximize the likelihood function, which measures how well the model explains the observed data.
+
+\subsubsection*{Steps in Maximum Likelihood Estimation}
+
+1. \textbf{Define the Likelihood Function}:
+   Given a set of observations \(\{x_1, x_2, \ldots, x_n\}\), and a statistical model with parameters \(\theta\), the likelihood function \(L(\theta)\) is defined as the probability of observing the given data under the model:
+   \[
+   L(\theta) = P(X_1 = x_1, X_2 = x_2, \ldots, X_n = x_n \mid \theta)
+   \]
+   For independent observations, the likelihood function can be written as:
+   \[
+   L(\theta) = \prod_{i=1}^n P(X_i = x_i \mid \theta)
+   \]
+
+2. \textbf{Log-Likelihood Function}:
+   It is often more convenient to work with the log-likelihood function, which is the natural logarithm of the likelihood function. The log-likelihood function \(\ell(\theta)\) is given by:
+   \[
+   \ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log P(X_i = x_i \mid \theta)
+   \]
+
+3. \textbf{Maximize the Log-Likelihood}:
+   Find the parameter values \(\hat{\theta}\) that maximize the log-likelihood function. This involves solving the following optimization problem:
+   \[
+   \hat{\theta} = \arg\max_\theta \ell(\theta)
+   \]
+   This can be done using calculus by setting the derivative of the log-likelihood function with respect to \(\theta\) to zero and solving for \(\theta\):
+   \[
+   \frac{\partial \ell(\theta)}{\partial \theta} = 0
+   \]
+
+4. \textbf{Second Derivative Test}:
+   To ensure that the solution obtained is a maximum, the second derivative of the log-likelihood function can be evaluated. If the second derivative is negative, it indicates a maximum:
+   \[
+   \frac{\partial^2 \ell(\theta)}{\partial \theta^2} < 0
+   \]
+
+\subsubsection*{Example}
+
+Consider a simple example where we assume the data \(\{x_1, x_2, \ldots, x_n\}\) are drawn from a normal distribution with unknown mean \(\mu\) and known variance \(\sigma^2\).
+
+1. \textbf{Likelihood Function}:
+   \[
+   L(\mu) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)
+   \]
+
+2. \textbf{Log-Likelihood Function}:
+   \[
+   \ell(\mu) = \sum_{i=1}^n \left( -\frac{1}{2} \log(2\pi\sigma^2) - \frac{(x_i - \mu)^2}{2\sigma^2} \right)
+   \]
+
+3. \textbf{Maximize the Log-Likelihood}:
+   Taking the derivative with respect to \(\mu\) and setting it to zero:
+   \[
+   \frac{\partial \ell(\mu)}{\partial \mu} = \sum_{i=1}^n \frac{x_i - \mu}{\sigma^2} = 0
+   \]
+   Solving for \(\mu\):
+   \[
+   \hat{\mu} = \frac{1}{n} \sum_{i=1}^n x_i
+   \]
+   This is the sample mean, which is the MLE for the mean of a normal distribution with known variance.
+
+\subsubsection*{Advantages and Disadvantages}
+
+\textbf{Advantages}:
+\begin{itemize}
+    \item Provides a unified framework for parameter estimation.
+    \item Asymptotically efficient: MLE estimators achieve the lowest possible variance among unbiased estimators for large sample sizes.
+\end{itemize}
+
+\textbf{Disadvantages}:
+\begin{itemize}
+    \item Requires the specification of the likelihood function, which might be complex for some models.
+    \item Can be computationally intensive, especially for large datasets or complex models.
+    \item Sensitive to model assumptions; incorrect assumptions can lead to biased estimates.
+\end{itemize}

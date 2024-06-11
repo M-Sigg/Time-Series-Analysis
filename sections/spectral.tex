@@ -2,14 +2,14 @@
 So far we've been studying time series $\{X_t\}_{t\in \mathbb{Z}}$, with models of the form \[X_t=\mu_t +\sum_{j=0}^\infty \Psi_j \epsilon_{t-j} \]
 We have seen, this encompasses the usual SARIMA processes (by writing the AR parts as MA($\infty$)). However, this applies also to any weakly stationary time series \footnote{This is the statement of Wold decomposition theorem.}. We have seen that we can decompose time series into trend, cycle and noise components. All of our analyses, e.g. calculation of covariances and correlations between different dates, was based on this representation. This type of analysis, i.e. decomposing a time series into elements across different time periods, is known as \textbf{time domain} analysis.\\
 
-However, this is not the only way of interpreting time series data. If we are primarily concerned in analyzing periodicities in our data, i.e. in economic terms different levels of seasonality, then the perspective of \textbf{frequency domain} or \textbf{spectral analysis} becomes useful. This involves decomposing a time series into an overlay of different periodic functions (i.e. sine and cosine) at different frequencies (meaning, a bit simplified, we find the linear combination of sine and cosine functions at different frequencies that reproduce our time series) and calculating how much of our process' total variance is due to individual frequencies.\\
+However, this is not the only way of interpreting time series data. If we are primarily concerned with analyzing periodicities in our data, i.e. in economic terms different levels of seasonality, then the perspective of \textbf{frequency domain} or \textbf{spectral analysis} becomes useful. This involves decomposing a time series into an overlay of different periodic functions (i.e. sine and cosine) at different frequencies (meaning, a bit simplified, we find the linear combination of sine and cosine functions at different frequencies that reproduce our time series) and calculating how much of our process' total variance is due to individual frequencies.\\
 
 \noindent
 \rule{\linewidth}{0.4pt}
 
 \subsubsection{Class example}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[scale=0.3]{images/Screenshot 2024-04-29 at 08.36.41.jpg}
 \centering
 \end{figure}
@@ -21,10 +21,10 @@ However, this is not the only way of interpreting time series data. If we are pr
     \item[] Let $R>0$ be a positive random variable.
     \item[] Let $\phi \in [0, 2\pi]$ be a uniform random variable
     \item[] Let $\varepsilon_t$ $t \in Z$ (so $t=...,-2-1,0,1,2,...$)
-    \item[*] \underline{Answer}: It is stationary: Why? 
-    \begin{itemize}
-        \item[] Compare to $W_t = \cos(t)+ \varepsilon_t$ (i.e., $R=1, \phi = 0$ instead of random) $\Rightarrow$ Not-stationary 
-    \end{itemize}
+\end{itemize}
+\underline{Answer}: It is stationary: Why? 
+\begin{itemize}
+    \item[] Compare to $W_t = \cos(t)+ \varepsilon_t$ (i.e., $R=1, \phi = 0$ instead of random) $\Rightarrow$ Not-stationary 
 \end{itemize}
 
 \begin{figure}[H]
@@ -32,7 +32,7 @@ However, this is not the only way of interpreting time series data. If we are pr
 \centering
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[scale=0.25]{images/Screenshot 2024-04-29 at 08.38.59.jpg}
 \centering
 \end{figure}
@@ -49,6 +49,7 @@ But have to let $k\rightarrow \infty$ and take a limit in the right way. \\
 \rule{\linewidth}{0.4pt}
 \bigskip
 
+\subsubsection{Spectral Representation Theorem}
 For spectral analysis, we again start with a stationary process $\{X_t\}_{t\in \mathbb{Z}}$ and write it in the form 
 \begin{align}
     X_t=\mu+\int_0^\infty \left[\alpha(\omega) \cos(\omega t) + \delta(\omega) \sin(\omega t) \right] d\omega, \quad \forall t \in \mathbb{Z} \label{SP1}
@@ -58,7 +59,7 @@ For spectral analysis, we again start with a stationary process $\{X_t\}_{t\in \
 A priori, it is not obvious that such decomposition (\ref{SP1}) always exists. The \textbf{spectral representation theorem} however answers this in the affirmative. How can sine and cosine functions (which have a very rigid periodic structure) reconstruct a function (i.e. the time series) that does not (necessarily) have the same regular periodic structure? For intuition, we illustrate this phenomenon using the (scaled) Gaussian kernel function: \[f(x)=\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}} \]
 We want to approximate this function using sine and cosine functions. Recalling that we can write $e^{i\omega j} = \cos(\omega j) + i \sin(\omega j)$, we want to write \[f(x) \approx \frac{1}{N} \sum_{j=0}^{N-1}a_j e^{i2\pi\frac{1}{N} x} \] i.e. as a linear combination of N periodic functions of different frequency. Finding the appropriate weights $a_j$ is called calculating the \textbf{Fourier transform} of $f$. One can show that for $N\rightarrow\infty$, one is able to perfectly reproduce $f$\footnote{More precisely, $\sin(\pi n x)$ and $\cos(\pi nx)$ for $n \in \mathbb{N}$ form a basis for the space of square integrable functions}; for $N$ finite, there will be an approximation error. As $N$ increases, the approximation error decreases: 
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[scale=0.3]{images/Screenshot 2024-05-06 at 09.35.47.jpg}
 \centering
 \caption{Successive approximation of the gaussian kernel using a Fourier basis. The global approximation error decreases as we increase the number of basis functions}
@@ -86,13 +87,15 @@ This new function $f(\cdot)$ is called the \textbf{spectral density} or \textbf{
 f(\omega)=\frac{1}{2\pi}\{\gamma(0) + 2\sum_{j=1}^\infty \gamma(j) \cos(\omega j)\}
 \]
 
-\textbf{Example 1.} The spectrum for:
+\textbf{Example 1.}\\
+
+The spectrum for:
 \begin{enumerate}
     \item White noise: \[
-    f(\omega) = \frac{\sigma_Z^2}{\pi}
+    f(\omega) = \frac{\sigma_Z^2}{2\pi}
     \]
     \item MA(1): \[
-    f(\omega)=\frac{1}{\pi}(1+\theta^2+2\theta\cos(\omega))\sigma_Z^2
+    f(\omega)=\frac{1}{2\pi}(1+\theta^2+2\theta\cos(\omega))\sigma_Z^2
     \]
     \item for ARMA(p,q), i.e. $X_t=\mu+\phi_1 X_{t-1}+\cdots+\phi_p X_{t-p} + \epsilon_t + \theta_1 \epsilon_{t-1} + \cdots +\theta_q \epsilon_{t-q} $, one can show that \[
     f(\omega)=\frac{\sigma_Z^2 \prod_(j=1)^q(1+\eta_j^2-2\eta_j \cos(\omega)) }{2\pi \prod_{j=1}^p(1+\lambda_j^2-2\lambda_j\cos(\omega)) }
@@ -118,12 +121,12 @@ i.e. the variance of the process equals the integral of the spectrum on $[-\pi,\
 \textbf{Example 2.} Let us illustrate what this means in a toy example: consider the process defined as \[
 X_t=\sum_{j=1}^M [\alpha_j \cos(\omega_j t) + \delta_j \sin(\omega_j t)]
 \] i.e. a discretized version of (\ref{SP1}), using only a finite number of frequencies $0<\omega_1<\cdots<\omega_M<\pi$. The sequences $\{\alpha_j\}_{j=1}^M, \{\delta_j\}_{j=1}^M$ are assumed to be serially uncorrelated and mutually independent with $Var(\alpha_j)=Var(\delta_j)=\sigma_j^2$. Then:\footnote{Recall that $\sin^2(x)+\cos^2(x)=1$} \[
-Var(X_t(=\sum_{j=1}^M \sigma_j^2 [\cos^2(\omega_j t)+ \sin^2 (\omega_j t)]=\sum_{j=1}^M \sigma_j^2
+Var(X_t)=\sum_{j=1}^M \sigma_j^2 [\cos^2(\omega_j t)+ \sin^2 (\omega_j t)]=\sum_{j=1}^M \sigma_j^2
 \] Hence the part of total variance due to cycles of frequencies less than or equal to $\omega_j$ is $\sum_{j=1}^i \sigma_j^2$ \
 How do we use this? Due to (\ref{SP2}), we know that the portion of variance attributable to frequencies in $[\omega_1, \omega_2]$ is given by $2\int_{\omega_1}^{\omega_2}f(\omega)d\omega $. This mean that the area under the graph $f(\cdot)$ between $\omega_1$ and $\omega_2$ is indicative of the importance of the corresponding frequencies for the process overall. If this area is large, then a lot of variance is generated by these frequencies, indicating some seasonality in that area.\\
 
 How do we estimate this? Directly estimating $\gamma(\cdot)$ for all periods and plugging it into $\frac{1}{2\pi}\sum_{j=-\infty}^\infty \gamma(j)e^{-i\omega j} $ is not possible, as we only have finitely many observations. Even the truncated version, i.e. \[ 
-\hat{f}:=\frac{1}{2\pi}[ \hat{\gamma}(0)+2\sum_{j=1}^{T-1} \hat{\gamma}(j)\cos(\omega j) ]
+\hat{f}(\omega):=\frac{1}{2\pi}\left[ \hat{\gamma}(0)+2\sum_{j=1}^{T-1} \hat{\gamma}(j)\cos(\omega j) \right]
 \] is impractical, as we need to estimate just as many parameters as we have observations. One could truncate this series to include fewer terms (a fixed number $M$). Alternatively, one could estimate the parameters of the underlying process in the time domain (i.e. ARMA model estimation), and calculate the implied covariances. Other methods include the smoothed periodogramm and kernel-based methods.
 
 \subsection{Application}
@@ -243,20 +246,18 @@ Two objects:
     \end{itemize}
 \end{itemize}
 
-\subsection{Variance estimation and inference via periodogram}
+\subsection{Variance Estimation and Inference via Periodogram}
 
 \textbf{\underline{Inference problems:}}
 
 \begin{itemize}
     \item Estimating a mean 
-    \begin{itemize}
-        \item[]$X_t=\mu + \varepsilon_t$
-        \item[] $\hat{\mu}= \frac{1}{T} \sum_{t=1}^T X_t$ 
-    \end{itemize}
-    \item[*] Question: How to compute a confidence interval for $\mu$? 
+    \[X_t=\mu + \varepsilon_t\]
+    \[\hat{\mu}= \frac{1}{T} \sum_{t=1}^T X_t\]
+    \item \textbf{Question}: How to compute a confidence interval for $\mu$? 
     \item A generalization of this problem is: estimate a regression with two time series \[y_t=\alpha+\beta X_t +\varepsilon_t\]
     \item[] $\rightarrow \hat{\beta}$ via OLS leads to question: How to compute a confidence interval? 
-    \item[*] Answer: variance of $\hat{\mu}$ is encoded in spectral density at 0
+    \item \textbf{Answer}: variance of $\hat{\mu}$ is encoded in spectral density at 0
     \item Why? $X_t = \mu + \varepsilon_t$ $\varepsilon_t$ mean $0$ but possibly dependent.
     \begin{itemize}
         \item[] $\hat{\mu}= \frac{1}{T} \sum_{t=1}^T X_t$
@@ -282,7 +283,7 @@ Two objects:
     \end{itemize}
 \end{itemize}
 
-\underline{Procedure for estimating mean}
+\textbf{\underline{Procedure for estimating mean}}
 \begin{itemize}
     \item Have: $X_t = \mu + \varepsilon_t$
     \item Calculate $\hat{\mu} = \frac{1}{T} \sum_{t=1}^T X_t$
