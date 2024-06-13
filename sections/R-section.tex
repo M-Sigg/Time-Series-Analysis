@@ -191,7 +191,9 @@ tsdiag(fit.diff.log)
 \subsection{U.S. Production Index}
 
 
-We start by reading in the data and setting some global variables:
+We start by reading in the data and setting some global variables:\\
+
+
 
 \begin{lstlisting}
 # user in put
@@ -217,7 +219,7 @@ ts.data.log <- log(ts.data.raw)
 ts.data.log.1stdiff <- diff(ts.data.log,1)
 \end{lstlisting}
 
-We first plot the raw series:
+We first plot the raw series: \\
 
 \begin{lstlisting}
 # plot time series and associated ac.f and pac.f and (raw series)
@@ -241,8 +243,7 @@ mtext(text="Exercise 7.1: U.S. Production Index (raw series)",side=3,line=0,oute
 \includegraphics[width=0.8\textwidth]{plots/UsProdRaw.pdf}
 \caption{U.S. Production Index Raw Series}
 \end{figure}
-
-It is obvious that this series is not stationary. Thus we try to address this by taking the log:
+The raw series is clearly non-stationary due to its upward trend. To address this, we apply a log transformation:
 
 \begin{figure}[H]
 \centering
@@ -250,7 +251,10 @@ It is obvious that this series is not stationary. Thus we try to address this by
 \caption{U.S. Production Index Log Series}
 \end{figure}
 
-We can estimate a SARIMA model on the raw series and look at the diagnostics:
+The log transformation, followed by differencing, makes the series more stationary. The ac.f. and pac.f. plots indicate some remaining autocorrelation, but the situation is improved.\\
+
+Next, we estimate a SARIMA model on the raw series and examine the diagnostics: \\
+
 
 \begin{lstlisting}
 # estimate SARIMA model (raw series)
@@ -279,8 +283,7 @@ mtext(paste("model: ",trim(capture.output(ts.data.raw.fit)[2]),sep=""),side=3,li
 \includegraphics[width=0.8\textwidth]{plots/UsProdRawDiag.pdf}
 \caption{U.S. Production Index Raw Diagnostics}
 \end{figure}
-
-We see that all the p-values for the Ljung-Box statistic fall outside the desired interval. How about the log series?
+The standardized residuals should ideally show no obvious pattern. However, for the raw series, some periods have larger residuals, indicating potential heteroscedasticity. The ac.f. shows significant autocorrelations at multiple lags, suggesting the model hasn't fully captured the data's dependencies. Similarly, the pac.f. indicates remaining structure in the residuals. The Ljung-Box statistics show p-values below the threshold, indicating significant autocorrelations, suggesting that the model may not be adequate.\\
 
 \begin{figure}[H]
 \centering
@@ -288,9 +291,10 @@ We see that all the p-values for the Ljung-Box statistic fall outside the desire
 \caption{U.S. Production Index Log Diagnostics}
 \end{figure}
 
-While, now more residuals seems to fall outside the CI in the pac.f., they are less far outside than the value of the residual in the raw series. And we observe that for some lags the p-values fall within the interval. \\
+For the log-transformed series, the residuals are more stable, indicating that the log transformation may have helped stabilize the variance. The ac.f. and pac.f. show fewer significant autocorrelations, suggesting a better model fit. The Ljung-Box statistics also indicate fewer autocorrelations, suggesting the residuals are closer to white noise.\\
 
-We now make forecasts on both series using our estimated SARIMA model and exponential smoothing:
+We now make forecasts on both series using our estimated SARIMA model and exponential smoothing:\\
+
 \begin{lstlisting}
 # forecast with exponential smoothing
 ts.data.raw.ets <- ets(y=ts.data.raw)
@@ -328,9 +332,10 @@ mtext(text="Exercise 7.1: U.S. Production Index (raw series) - forecasts",side=3
 \caption{U.S. Production Index Raw Forecasts}
 \end{figure}
 
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{plots/UsProdLogForecast.pdf}
 \caption{U.S. Production Index Log Forecasts}
 \end{figure}
+
+The Q-Q Plots of the log series indicate that the residuals are closer to normality, while they still have some deviations at the tails. This suggests that the models on the log series capture the underlying pattern more effectively.

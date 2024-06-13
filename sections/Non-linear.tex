@@ -173,3 +173,162 @@ f(x)=k\cdot x\cdot (1-x)
     \item If $X_1 \sim Unif[0,1]$, then $X_2$ is random and $X_2=k\cdot X_1 \cdot (1-X_1)$
     \item What is the distribution of $x_2$?
 \end{itemize}
+
+
+\subsection{Exercises}
+
+\begin{footnotesize}
+
+\subsubsection*{2. Stationarity for GARCH models}
+
+\textbf{Question:} Consider the GARCH(h,k) model:
+\begin{align*}
+    X_t &= \mu+Y_t \\
+    Y_t &= \sigma_t \epsilon_t, \quad \epsilon_t \overset{i.i.d.}{\sim} \mathcal{N}(0,1) \\
+    \sigma^2_t &= \omega + \sum_{i=1}^h \beta_i \sigma_{t-i}^2 + \sigma_{j=1}^k \alpha_j Y_{t-j}^2, \quad \omega,\beta_i, \alpha_j \geq 0
+\end{align*}
+Derive stationarity conditions for this model by following these steps:
+\begin{enumerate}
+    \item Calculate $\mathbb{E}[Y_t]$
+    \item Calculate $Cov(Y_t,Y_s)$
+    \item Calculate $\mathbb{E}[\sigma_t^2]$
+\end{enumerate}
+\textbf{Answer:} \\
+
+Stationarity (weak) conditions:
+\begin{itemize}
+    \item $\mathbb{E}[X_t] =$ constant
+    \item $Var(X_t) < \infty$, constant
+    \item $\gamma(\cdot)$ well defined
+\end{itemize}
+
+\textbf{1.}
+\begin{align*}
+    \mathbb{E}[X_t] &= \mu + \mathbb{E}[Y_t] = \mu + \mathbb{E}[\sigma_t \epsilon_t] \\ &= \mu+ \mathbb{E}[\mathbb{E}[\sigma_t \epsilon_t | \mathcal{F}_{t-1}]]\\
+    &= \mu + \mathbb{E}[\sigma_t \underbrace{\mathbb{E}[\epsilon_t|\mathcal{F}_{t-1}]}_{=0}] = 0 + \mu\\ &= \mu
+\end{align*}
+
+\textbf{2.}
+\begin{align*}
+    \mathbb{E}[(X-t -\mu)(X_s-\mu)] &= \mathbb{E}[Y_t Y_s]\\
+    &=\mathbb{E}[\sigma_t \epsilon_t \sigma_s \epsilon_s]\\
+    &= \mathbb{E}[\mathbb{E}[ \sigma_t \sigma_s \epsilon_t \epsilon_s | \mathcal{F}_s]] \\
+    \text{for $t>s$ } &= \mathbb{E}[\sigma_s \epsilon_s \mathbb{E}[\sigma_t\epsilon_t|\mathcal{F}_s]] \\
+    \text{for $t-1 > s$ } &= \mathbb{E}[\sigma_s \epsilon_s \mathbb{E}[ \mathbb{E}[\sigma_t \epsilon_t|\mathcal{F}_{t-1} ]|\mathcal{F}_s]] = 0
+\end{align*}
+
+\begin{subequations}
+\begin{equation}
+\begin{array}{r@{}l}
+\gamma(k) = & \left\{
+\begin{aligned}
+    & ?  &&k=0 \nonumber \\
+    & 0 && \text{else} \nonumber
+\end{aligned}
+\right.
+\end{array}
+\end{equation}
+\end{subequations}
+
+\textbf{3.}
+\begin{align*}
+    Var(X_t)&= \mathbb{E}[Y_t^2] = \mathbb{E}[\sigma_t^2 \epsilon_t^2]\\
+    &=\mathbb{E}[\mathbb{E}[\sigma_t^2 \epsilon_t^2| \mathcal{F}_{t-1}]]\\
+    &= \mathbb{E}[\sigma_t^2 \underbrace{\mathbb{E}[\epsilon_t^2 | \mathcal{F}_{t-1}]}_{=1}] \\
+    &= \mathbb{E}[\sigma_t^2]
+\end{align*}
+
+
+\begin{align*}
+    \sigma_t^2 &= \omega + \sum_{j=1}^h \beta_j \sigma_{t-j}^2 + \sum_{j=1}^k \alpha_j y_{t-j}^2 \\
+    &= \omega + \sum_{j=1}^h \beta_j \sigma_{t-j}^2 + \sum_{j=1}^k \alpha_j \sigma_{t-j}^2 \epsilon_{t-j}^2 \\
+    &= \omega + \sum_{j=1}^h \beta_j \left( \omega + \sum_{i=1}^h \beta_j \sigma_{t-j-i}^2 + \sum_{i=1}^k \alpha_i \sigma_{t-j-i}^2 \epsilon_{t-j-i}^2  \right) + \sum_{j=1}^k \alpha_j \epsilon_{t-j}^2 \left(\omega + \sum_{i=1}^h \beta_i \sigma_{t-j-i}^2 + \sum_{i=1}^k \alpha_i \sigma_{t-j-i}^2 \epsilon_{t-j-i}^2 \right) \\
+    &= \omega + \left( \sum_{j=1}^h \beta_j + \sum_{j=1}^k \alpha_j \epsilon_{t-j}^2 \right)\omega + \omega\left(\sum_{j=1}^h \beta_j \left(\sum_{i=1}^h \beta_i + \sum_{i=1}^k \alpha_i \epsilon_{t-j-i}^2 \right) + \sum_{j=1}^k \alpha_j \epsilon_{t-j}^2 \left(\sum_{i=1}^h \beta_i + \sum_{i=1}^k \alpha_i \epsilon_{t-j-i}^2 \right) \right) + \cdots \\
+    &= \omega\sum_{i=0}^\infty \mu(t,i)\\
+    & \vdots \\
+    & \text{where } \mu(t,0) = 1\\
+    & \mu(t,1) = \sum^h\beta_j + \sum^k \alpha_j + \epsilon_{t-j}^2\\
+    & \vdots\\
+    &= \mu(t,k+1) = \sum^h \beta_j \mu(t-j),k) + \sum^k \alpha_j \epsilon_{t-j}^2 \mu(t-j,k) \\
+    &\text{Note: } \mathbb{E}[ \mu(t,k)] = \mathbb{E}[\mu(s,k)] \quad \forall t,s,k, \text{because $\{\epsilon_t\}_t$ is stationary}\\
+    & \rightarrow \mathbb{E}[\mu(t,k+1)] = \left(\sum^h \beta_j + \sum^k \alpha_j \underbrace{\mathbb{E}[\epsilon_{t-j}^2]}_{=1} \right)\mathbb{E}[\mu(t,k)] \\
+    \Rightarrow \mathbb{E}[\sigma_t^2] &= \omega \sum_{i=0}^\infty \left(\sum_{j=1}^k \alpha_j  + \sum_{j=1}^h \beta_j \right)^i \underbrace{\mathbb{E}[\mu(t,0)]}_{=1} \\
+    &= \omega\sum_{i=0}^\infty \left(\sum_{j=1}^k \alpha_j \sum_{j=1}^h \beta_j \right)^i\\
+    &= \frac{\omega}{1- \left( \sum^k \alpha_j + \sum^h \beta_j \right)} \\
+    &\text{Converges } \Leftrightarrow \sum^k \alpha_j + \sum^h \beta_j < 1
+\end{align*}
+
+$\Rightarrow$ GARCH(h,k) is a stationary model 
+\[ \Leftrightarrow \sum^j \alpha_j + \sum^h \beta_j < 1\]
+ 
+
+\subsubsection*{4. Estimation}
+
+\textbf{Question:} We typically estimate GARCH models using maximum likelihood. 
+\begin{enumerate}
+    \item Recall the definition of the likelihood function and loglikelihood function (the latter being denoted by $\ell(\theta;y)$)
+    \item Derive the loglikelihood function for the GARCH(h,k) model. Write down the exact steps how to calculate this function.
+\end{enumerate}
+
+\textbf{Answer:} \\
+
+\textbf{1.}
+\begin{itemize}
+    \item \textbf{Loglikelihood Function:}
+    \begin{itemize}
+        \item The likelihood function $L(\theta;y)$ measures the probability of observing the given sample data $y$ under the parameters $\theta$ of a statistical model. For a set of observations $y_1,y_2,\ldots, y_T$ with density function $f(y_t;\theta)$, the likelihood function is: \[
+        L(\theta;y)=\prod_{t=1}^T f(y_t;\theta)
+        \]
+    \end{itemize}
+    \item \textbf{Log-likelihood Function:}
+    \begin{itemize}
+        \item The log-likelihood function $\ell (\theta;y)$ is the natural logarithm of the likelihood function. It simplifies the computation and is given by: \[
+        \ell (\theta;y) = \log L(\theta;y)=\sum_{t=1}^T \log f(y_t;\theta)
+        \]
+    \end{itemize}
+\end{itemize}
+\textbf{2.} 
+\begin{enumerate}
+    \item \textbf{GARCH(h,k) Model Specification:}
+    \begin{itemize}
+        \item A GARCH model consists of two equations:
+        \begin{itemize}
+            \item Mean equation: \[
+            y_t=\mu + \varepsilon_t
+            \]
+            \item Variance Equation: \[
+            \sigma_t^2 = \alpha_0 + \sum_{i=1}^h \alpha_i \varepsilon_{t-i}^2 + \sum_{j=1}^k \beta_j \sigma_{t-j}^2
+            \] where $\alpha_0>0, \alpha_i\geq 0, \beta_j \geq0$, and $\sigma_t^2$ is the conditional variance of $\varepsilon_t$
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Assume $\varepsilon_t \sim N(0,\sigma_t^2)$:}
+    \begin{itemize}
+        \item Given the normal distribution assumption, the density function of $\varepsilon_t$ is: \[
+        f(\varepsilon_t) = \frac{1}{\sqrt{2\pi \sigma_t^2}} \exp \left(-\frac{\varepsilon_t^2}{2\sigma_t^2}\right)
+        \]
+    \end{itemize}
+    \item \textbf{Substitute $\varepsilon_t = y_t -\mu$:}
+    \begin{itemize}
+        \item \[
+        f(y_t;\theta)=\frac{1}{\sqrt{2\pi \sigma_t^2}} \exp\left(-\frac{(y_t-\mu)^2}{2\sigma_t^2}\right)
+        \] where $\theta$ represents the vector of parameters $(\mu,\alpha_0, \alpha_1,\ldots,\alpha_h,\beta_1,\ldots,\beta_k)$
+    \end{itemize}
+    \item \textbf{Write the Log-Likelihood Function:}
+    \begin{itemize}
+        \item The log-likelihood function for $y_i,y_2,\ldots,y_T$ is:\[
+        \ell(\theta;y) = \sum_{t=1}^T \log f(y_t;\theta)
+        \]
+        \item Substitute the density function: \[
+        \ell(\theta;y) = \sum_{t=1}^T \left[ -\frac{1}{2} \log (2\pi \sigma_t^2)-\frac{(y_t-\mu)^2}{2\sigma_t^2} \right]
+        \]
+    \end{itemize}
+    \item \textbf{Simplify the Expression:}
+    \[
+    \ell(\theta;y) = -\frac{T}{2} \log(2\pi) -\frac{1}{2} \sum_{t=1}^T \log (\sigma_t^2)-\frac{1}{2} \sum_{t=1}^T \frac{(y_t-\mu)^2}{\sigma_t^2}
+    \]
+\end{enumerate}
+
+
+
+
+\end{footnotesize}

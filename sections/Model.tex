@@ -50,7 +50,7 @@ Sometimes called $\underbrace{\text{"HAC"}}_\text{heteroskedasticity, autocorrel
     &=\frac{1}{T^2} \sum_{t=1}^T var(X_t) + \frac{1}{T^2} \sum_{s\neq t} Cov(X_t,X_s)\\
 \end{align*}
 
-usually with iid. data: would just estimate $\hat{var}(\hat{\mu})=\frac{1}{T}\sum_{t=1}^T(X_t-\hat{\mu})^2=\hat{\gamma}_0 $. Then form C.I.: $\hat{\mu}\pm 1.96 \times \hat{\gamma}_0^\frac{\sqrt{\hat{\gamma}_0}}{\sqrt{T}} $
+usually with iid. data: would just estimate $\hat{var}(\hat{\mu})=\frac{1}{T}\sum_{t=1}^T(X_t-\hat{\mu})^2=\hat{\gamma}_0 $. Then form C.I.: $\hat{\mu}\pm 1.96 \times \frac{\sqrt{\hat{\gamma}_0}}{\sqrt{T}} $
 
 \underline{In time series data}:
 \begin{itemize}
@@ -73,6 +73,61 @@ In stats software packages, ---- bounds are drawn at $\pm \frac{2}{\sqrt{T}}$ li
 \end{itemize}
 
 \subsection{Estimation}
+
+\subsubsection{Estimating Parameters of an AR Process}
+
+Given an AR(p) process: \[
+X_t -\mu = \alpha_1(X_{t-1}-\mu) + \cdots + \alpha_p (X_{t-p} -\mu) Z_t
+\] Given $N$ observations $x_1, \ldots, x_N$, the parameters $\mu, \alpha_1, \ldots, \alpha_p$ may be estimated by least squares by minimizing\[
+S = \sum_{t=p+1}^N \left[x_t-\mu-\alpha_1(x_{t-1}-\mu) - \cdots - \alpha_p (x_{t-p}-\mu) \right]^2
+\] with respects to $\mu, \alpha_1, \ldots, \alpha_p$. If the $Z_t$ process is normal, then this is equivalent to maximum likelihood estimation. \\
+
+In the first order case we get: \[
+\hat{\mu} = \frac{\bar{x}_{(2)} - \hat{\alpha}_1 \bar{x}_{(1)}}{1-\hat{\alpha}_1}
+\] and \[
+\hat{\alpha}_1 = \frac{\sum_{t=1}^{N-1} (x_t-\hat{\mu})(x_{t+1}-\hat{\mu}) }{\sum_{t=1}^{N-1} (x_t- \hat{\mu})^2}
+\] where $\bar{x}_{(1)},\bar{x}_{(2)} $ are the means of the first and last $(N-1)$ observations. Now \[ 
+\bar{x}_{(1)} \simeq \bar{x}_{(2)} \simeq \bar{x}
+\] thus we have approximately \[
+\hat{\mu} = \bar{x}
+\] Then the estimator becomes \[
+\hat{\alpha}_1 \approx \frac{\sum_{t=1}^{N-1} (x_t-\bar{x})(x_{t+1}-\bar{x}) }{\sum_{t=1}^{N-1} (x_t- \bar{x})^2}
+\]
+This is basically the same estimator as in an ordinary regression with $X-{t-1}-\bar{x}$ as the 'independent' variable. In fact, asymptotically, much of classical regression theory can be applies to AR models. \\
+Further approximation, can be used by changing the denominator to \[\sum_{t=1}^N(x_t-\bar{x})^2\] So that \begin{align*}
+    \hat{{\alpha}}_1 &\simeq \frac{c_1}{c_0}\\
+    &= r_1
+\end{align*} Where $r_1$ is an estimator for $\rho(1)$. \\
+
+In a second order case, we'd get \begin{align*}
+    \hat{\mu} &\simeq \bar{x}\\
+    \hat{\alpha}_1 &\simeq r_1(1-r_2)/(1-r_1^2) \\
+    \hat{\alpha}_2 &\simeq (r_2-r_1^2)/(1-r_1^2)
+\end{align*} Where $\hat{\alpha}_2$ is the partial autocorrelation coefficient of order two. 
+
+\subsubsection{Fitting a MA Process}
+Estimation is more difficult for an MA process than an AR process, because some form of numerical iteration must be performed. First, consider a MA(1) process: \begin{align}
+X_t = \mu + Z_t + \beta_1 Z_{t-1} \label{4.13}
+\end{align}
+Unfortunately, we cannot write the residual sum of squares $\Sigma Z_t^2$ solely in terms of the observed $x$s and the parameters $\mu, \beta_1$ and so no explicit least squares estimates can be found. One possible alternative is to (i) Select suitable starting values for $\mu$ and $\beta_1$, such as $\mu=\bar{x}$ and the value of $\beta_1$ given by the solution to this equation: $r_1 = \hat{\beta}_1/ (1+\hat{\beta}_1^2)$. (ii) Calculate the corresponding residual sum of squares using Equation (\ref{4.13}) recursively in the form \[ Z_t = X_t -\mu -\beta_1 Z_{t-1}\] Taking $z_0 = 0$, we get $z_1 = x_1 -\hat{\mu}$, and then $z_2 = x_1 -\hat{\mu}-\hat{\beta}_1 z_1$, and so on until $z_N = x_N- \hat{\mu}- \hat{\beta}_1 z_{N-1}$. Then the residual sum of squares $\sum_{t=1}^N z_t^2$ is calculated conditional on the given values of the parameters $/mu$ and $\beta_1$ and $z_0=0$. (iii) Repeat this procedure for other neighbouring values of $\mu$ and $\beta_1$ so that the residual sum of squares $\Sigma z_t^2$ is computed on a grid of points in the $(\mu,\beta_1)$ plane. (iv) Determine by inspection the values of $\mu$ and $\beta_1$ that minimize $\Sigma z_t^2$.
+
+
+\subsubsection{Estimating Parameters of an ARMA Model}
+The estimation problems are similar to those for an MA model in that an iterative procedure has to be used. As an example consider the ARMA(1,1) model: \[
+X_t - \mu = \alpha_1 (X_{t-1}- \mu) + Z_t + \beta_1 Z_{t-1}
+\]Given $N$ observations, $x_1, \ldots, x_N$, we guess values for $\hat{\mu}, \hat{\alpha}_1, \hat{\beta}_1 $, set $z_0 = 0$ and $x_0 = \hat{\mu}$, and then calculate the residuals recursively by \begin{align*}
+    z_1 &= x_1 - \hat{\mu} \\
+    z_2 &= x_2-\hat{\mu} - \hat{\alpha}_1 (x_1-\mu) - \hat{\beta}_1 z_1 \\
+    &\text{ up to} \\
+    z_N&= x_N - \hat{\mu}- \hat{\alpha}(x_(N-1) -\mu) - \hat{\beta}z_{N-1}
+\end{align*}
+The residual sum of squares $\sum_{t=1}^N z_t^2$ may then be calculated. Then other values of $\hat{\mu}, \hat{\alpha}_1, \hat{\beta}_1 $ may be tried until the minimum residual sum of squares is found.
+
+
+\rule{\textwidth}{0.4pt}
+
+\subsubsection{Estimation: Lecture}
+
 
 Least squares estimation for $\varepsilon_t$ estimates. Note that least squares is equivalent to Maximum Likelihood for $\varepsilon_t$ Gaussian \\
 
@@ -150,19 +205,23 @@ X_t=\mu+\alpha_1X_{t-1}+...+\alpha_p X_{t-p}+\varepsilon_t+\theta_1 \varepsilon_
     \item[] For $ARMA(p,q)$: \quad what should $p,q$ be?
     \item[] For $ARIMA(p,d,q)$: \quad what should $p,d,q$ be?
 \end{itemize}
-Guiding principle: Take $p+q0$ (or $p+d+q$) to be as small as possible while still modeling the data well
+Guiding principle: Take $p+q$ (or $p+d+q$) to be as small as possible while still modeling the data well
 \begin{itemize}
     \item ACF and PACF of $\hat{\varepsilon}_t$ are zero (to statistical precision)
     \item Likelihood small relative to marginal benefit from the next parameter
 \end{itemize}
 
-\textbf{\underline{Tests for leftover correlation in residuals}}
+\textbf{\underline{Tests for leftover correlation in residuals}} \\
+
+When a model has been fitted to a time series, it is advisable to check that the model really does provide an adequate description of the data. This is usually done by looking at the residuals. If we have a 'good' model, we expect the residuals to be 'random' and 'close to zero'. Two obvious steps are to plot the residuals as a time plot, and to calculate the correlogram of the residuals.
+
+
 \[
 X_t=\hat{\mu} +\hat{\alpha}_1X_{t-1}+...+\hat{\alpha}_p X_{t-p}+\hat{\varepsilon}_t +\hat{\theta}_1\hat{\varepsilon}_{t-1}+...+\hat{\theta}_q \hat{\varepsilon}_{t-q}
 \]
 \begin{itemize}
     \item Look at ACF, PACF of $\hat{\varepsilon}_t$ against $\pm \frac{2}{\sqrt{T}}$ limits drawn by Software
-    \item Ljung-Box test: For $\hat{r}_{\varepsilon,k}^2=$ autocorr. of $\hat{\varepsilon log k}$
+    \item Ljung-Box test: For $\hat{r}_{\varepsilon,k}^2=$ autocorr. of $\hat{\varepsilon} \log k$
     \begin{align*}
         Q&=T(T+2) \sum_{k=1}^K \frac{\hat{r}_{\varepsilon,k}^2}{T-k}\\
         Q &\sim \chi^2_{K-p-q} &&\text{d.f. $K$ choice, say $K=10$ e.g.}
