@@ -138,7 +138,7 @@ We apply this methodology to US manufacturing data, using the FED's monthly seas
 \centering
 \end{figure}
 
-This does not yield meaningful results, as the method requires a stationary time series. In this case, the low-frequency (i.e. long-term) cycles induced by the uptrend dominate everything else. We therefore re-apply this method to the ime series of log-differences: 
+This does not yield meaningful results, as the method requires a stationary time series. In this case, the low-frequency (i.e. long-term) cycles induced by the uptrend dominate everything else. We therefore re-apply this method to the time series of log-differences: 
 
 \begin{figure}[H]
 \includegraphics[scale=0.4]{images/Screenshot 2024-05-06 at 10.39.09.jpg}
@@ -174,12 +174,12 @@ This gives an interpretable spectral density. Recall that the area under the cur
 \[X_t=\varepsilon_t + \theta \varepsilon_{t-1}\]
 what is $\gamma(k)$?
 \begin{align*}
-    \gamma(1)&=cov(\varepsilon_t+\theta \varepsilon_{t-1}, \varepsilon_{t-1} \theta \varepsilon_{t-2} \\
-    &= cov(X_t, _{t-1})\\
-    &= cov(\varepsilon_{t}, \varepsilon_{t-1})+cov(\theta \varepsilon_{t-1}, \varepsilon_{t-1}) + cov(\varepsilon_{t}, \theta \varepsilon_{t-2}+cov(\theta \varepsilon_{t-1}, \theta \varepsilon_{t-2}\\
+    \gamma(1)&=cov(\varepsilon_t+\theta \varepsilon_{t-1}, \varepsilon_{t-1} \theta \varepsilon_{t-2}) \\
+    &= cov(X_t, X_{t-1})\\
+    &= cov(\varepsilon_{t}, \varepsilon_{t-1})+cov(\theta \varepsilon_{t-1}, \varepsilon_{t-1}) + cov(\varepsilon_{t}, \theta \varepsilon_{t-2})+cov(\theta \varepsilon_{t-1}, \theta \varepsilon_{t-2})\\
     &= \theta cov(\varepsilon_{t-1},\varepsilon_{t-1}) &&\text{(all other terms $=0$)}\\
-    &= \theta var(\varepsilon_{t}\\
-    \gamma(0)&= cov(\varepsilon_{t}, \theta \varepsilon_{t-1}, \varepsilon_{t} + \theta \varepsilon_{t-1}) \\
+    &= \theta var(\varepsilon_{t})\\
+    \gamma(0)&= cov(\varepsilon_{t} + \theta \varepsilon_{t-1}, \varepsilon_{t} + \theta \varepsilon_{t-1}) \\
     &= (1+\theta^2)var(\varepsilon_{t}) \\
     \gamma(2)&=0 &&{\gamma(k)=0 \text{\quad} \forall |k|\geq 2 } \\
     \Rightarrow f(\omega) &= \frac{1}{\pi} [ 1 + \theta^2 + 2 \theta \cos(\omega) ]var(\varepsilon_t)
@@ -187,7 +187,7 @@ what is $\gamma(k)$?
 
 How to estimate $f(\omega)$ given data $X_1,...,X_T$?
 \begin{align*}
-    f(\omega) =\frac{1}{\pi} [ \gamma(o) + 2\sum_{k=1}^\infty \gamma(k) \cos \omega k] 
+    f(\omega) =\frac{1}{\pi} [ \gamma(0) + 2\sum_{k=1}^\infty \gamma(k) \cos \omega k] 
 \end{align*}
 
 Two options for $\hat{f}$: 
@@ -216,8 +216,8 @@ Unfortunately,
 \[\underset{T \rightarrow \infty}{lim} var(I(\omega)) \neq 0 \]
 
 But with Smoothing + the property that 
-\[I(\omega_1) \overset{\ind}{\approx} I(\omega_2) \text{
-\quad "$\overset{\ind}{\approx}$" means approximately independent. 
+\[I(\omega_1) \overset{\perp}{\approx} I(\omega_2) \text{
+\quad "$\overset{\perp}{\approx}$" means approximately independent. 
 } \]
 
 
@@ -246,6 +246,51 @@ Two objects:
     \end{itemize}
 \end{itemize}
 
+
+\textbf{Periodogram and Its Use}\\
+
+The periodogram is both a mathematical tool and a graphical representation used in signal processing and time series analysis to estimate the spectral density, or power spectrum, of a signal. The spectral density provides information about the distribution of power or variance of a time series as a function of frequency.\\
+
+\underline{Mathematical Tool}\\
+
+Given a time series \( \{X_t\} \) with \( T \) observations, the periodogram \( I(\omega) \) at frequency \( \omega \) is defined as:
+\[
+I(\omega) = \frac{1}{\pi T} \left| \sum_{t=1}^T X_t e^{-i \omega t} \right|^2
+\]
+where \( \omega \) is a frequency in radians per unit time, and \( e^{-i \omega t} \) represents a complex exponential function. This equation computes the periodogram value at a given frequency, providing an estimate of the spectral density. \\
+
+\underline{Graphical Representation}\\
+
+The periodogram is often visualized as a graph, with frequency \( \omega \) on the horizontal axis and the periodogram values \( I(\omega) \) on the vertical axis. This graph helps to identify dominant frequencies or periodic components in the data.\\
+
+
+
+\underline{Uses of the Periodogram}\\
+
+The periodogram is used for various purposes in time series analysis:
+
+\begin{itemize}
+    \item \textbf{Identifying Periodicities}: The periodogram helps in detecting and analyzing periodic components in the data.
+    \item \textbf{Spectral Analysis}: It is used to understand the frequency domain characteristics of a time series.
+    \item \textbf{Model Diagnostics}: In time series modeling, the periodogram can diagnose the presence of periodic components.
+    \item \textbf{Filtering}: The periodogram aids in designing filters to remove or isolate specific frequency components from the data.
+\end{itemize}
+
+\underline{Limitations}\\
+
+Despite its usefulness, the periodogram has some limitations:
+
+\begin{itemize}
+    \item \textbf{Variance}: The periodogram can have high variance, making it difficult to interpret without smoothing or averaging techniques.
+    \item \textbf{Resolution}: The frequency resolution depends on the length of the time series. Longer series provide better frequency resolution.
+\end{itemize}
+
+
+
+
+
+
+
 \subsection{Variance Estimation and Inference via Periodogram}
 
 \textbf{\underline{Inference problems:}}
@@ -258,7 +303,7 @@ Two objects:
     \item A generalization of this problem is: estimate a regression with two time series \[y_t=\alpha+\beta X_t +\varepsilon_t\]
     \item[] $\rightarrow \hat{\beta}$ via OLS leads to question: How to compute a confidence interval? 
     \item \textbf{Answer}: variance of $\hat{\mu}$ is encoded in spectral density at 0
-    \item Why? $X_t = \mu + \varepsilon_t$ $\varepsilon_t$ mean $0$ but possibly dependent.
+    \item Why? $X_t = \mu + \varepsilon_t, \quad \varepsilon_t$ mean $0$ but possibly dependent.
     \begin{itemize}
         \item[] $\hat{\mu}= \frac{1}{T} \sum_{t=1}^T X_t$
         \begin{align*}

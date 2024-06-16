@@ -50,27 +50,6 @@ A time series $\{X_t\}$ is \textbf{strictly stationary} if for any positive inte
 
 Intuitively, the time series "looks the same" in terms of its randomness at all points in time.\\
 
-\textbf{Example:}\\
-
-Let 
-\[\Tilde{x}_t = 
-\begin{cases} 
-0 & \text{if day t's coin flip is heads}, \\
-1 & \text{if day t's coin flip is tails}.
-\end{cases}
-\]
-This is stationary.\\
-
-Let
-
-\[x_t = 
-\begin{cases} 
-0 & \text{if day t's coin flip is heads}, \\
-1 & \text{if day t's coin flip is tails}. \\
-\end{cases}
-\]
-except: \quad every time there are 3 heads in a row, do not toss a coin, but make the next point tails. If $\Tilde{x}_{t-3}=\Tilde{x}_{t-2}=\Tilde{x}_{t-1}=$ heads then assign $\Tilde{x}_t=$ tails.\\
-
 \textbf{Properties}:
 \begin{itemize}
     \item If $X_t$ and $Y_t$ are time series and they are independent from each other and $X_t$, $Y_t$ are stationary, then $X_t + Y_t$ is stationary
@@ -81,7 +60,7 @@ except: \quad every time there are 3 heads in a row, do not toss a coin, but mak
 \subsection{Trends in Time Series}
 
 Trend refers to slow changes in the mean of a time series $X_t$. The simplest example of a time series with a trend is one of the form:\[
-X_t = \alpha = \beta t + \varepsilon_t
+X_t = \alpha + \beta t + \varepsilon_t
 \]
 where \begin{itemize}
     \item $\alpha$ and $\beta$ are real numbers
@@ -155,21 +134,25 @@ Again, like in Global trend extraction, for any linear filter, can calculate.
 \boxed{\text{res}(X_t)=X_t-\text{ Sm}(X_t)}
 \]
 
-\textbf{\underline{End effect problem}}: If observed $ \{X_t\}_{t=1}^T $ cannot smooth forward at $X_T$. With simple MA with $q=1$, $Sm(X_t)=\frac{1}{3}(X_{t-1}+X_t+X_{t+1})$. Cannot calculate $Sm(X_T)$ as $X_{T+1}$ is unknown. \\
+\textbf{\underline{End effect problem}}: \\
+
+If observed $ \{X_t\}_{t=1}^T $ cannot smooth forward at $X_T$. With simple MA with $q=1$, $Sm(X_t)=\frac{1}{3}(X_{t-1}+X_t+X_{t+1})$. Cannot calculate $Sm(X_T)$ as $X_{T+1}$ is unknown. \\
 
 Can use asymmetric filters:
 \[Sm(X_t)=\sum_{r=-q}^0 a_r X_t\]
 $\Rightarrow X_{t+1}$ never affects $Sm(X_t)$
 \begin{itemize}
     \item Exponential Smoothing $Sm(X_t)=\sum_{j=0}^\infty a(1-a)^j x_{t-j}$
-    \item First Difference average $Sm(X_t)=\frac{1}{2}(X_t+X_{t-1}$
+    \item First Difference average $Sm(X_t)=\frac{1}{2}(X_t+X_{t-1})$
 \end{itemize}
 
 
 \textbf{\underline{Differencing}}:
 \begin{itemize}
-    \item \textbf{First Order Differencing}: $Y_t =X_t-X_{t-1} = \nabla X_t$
-    \item \textbf{Second Order Differencing}: $Z_t=\nabla Y_t= (X_t-X_{t-1})-(X_{t-1}-X_{t-2})=X_t-2X_{t-1}+X_{t-2}=\nabla^2X_t$
+    \item \textbf{First Order Differencing}: $\nabla X_t = X_t - X_{t-1}$
+    \item \textbf{Second Order Differencing}: $\nabla^2 X_t = \nabla \nabla X_t = \nabla (X_t- X_{t-1}) = \nabla X_t - \nabla X_{t-1} = X_t - 2X_{t-1} + X_{t-2}$
+    \item \textbf{Seasonal Differencing}: $\nabla_2 = X_t - X_{t-2}$
+    \item Seasonal + Second Order: $\nabla^2_2 X_t= \nabla_2 \nabla_2 X_t = \nabla_2 (X_t-X_{t-2}) = X_t - 2X_{t-2} + X_{t-4} $
 \end{itemize}
 
 \textbf{\underline{Kernel Smoothing}}\\

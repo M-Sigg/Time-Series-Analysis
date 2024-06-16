@@ -1,6 +1,6 @@
-Technically, no official definition of nonlinear time series, but sometimes, there is an obvious choice for what to call linear or nonlinear. \\
+Technically, no official definition of nonlinear time series exists, but sometimes, there is an obvious choice for what to call linear or nonlinear. \\
 
-For time series like \[X_t = f(X_{t-1} ... X_{t-p}) + \varepsilon_t \]
+For a time series like \[X_t = f(X_{t-1} ... X_{t-p}) + \varepsilon_t \]
 \begin{itemize}
     \item if $f(X_{t-1} ... X_{t-p})$ is something like $ =\alpha_1 X_{t-1} + ...+ \alpha_p X_{t-p}$ call this linear. Otherwise, nonlinear.
 \end{itemize}
@@ -47,7 +47,7 @@ Estimation: Choose a distribution for $\varepsilon_t$ (like $N(0,1)$) and do max
 
 \subsection{Volatility Models}
 
-Whereas the previous non-linear model allow for improved point forecasts of the observed variable to be made when the true model is known, we here focus on \textbf{volatility models} that are primarily concerned with modelling \textit{changes in variance} or \textit{volatility}. They do not generally lead to better point forecasts, but may lead to better estimates of the (local) variance. This, in turn, allows more reliable prediction intervals and hence a better assessment of risk. 
+Whereas the previous non-linear model allows for improved point forecasts of the observed variable to be made when the true model is known, we here focus on \textbf{volatility models} that are primarily concerned with modelling \textit{changes in variance} or \textit{volatility}. They do not generally lead to better point forecasts, but may lead to better estimates of the (local) variance. This, in turn, allows more reliable prediction intervals and hence a better assessment of risk. 
 
 \begin{figure}[H]
 \includegraphics[scale=0.4]{images/Screenshot 2024-05-13 at 09.11.00.jpg}

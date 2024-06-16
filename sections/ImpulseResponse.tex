@@ -1,5 +1,8 @@
 \subsection{Impulse Response Function}
-What is an impulse response function? \\
+\textbf{What is an impulse response function?} \\
+
+An impulse response function (IRF) measures the reaction of a time series variable to a shock or impusle at a given point in time.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{images/Screenshot 2024-05-21 at 18.13.20.jpg}
@@ -7,94 +10,109 @@ What is an impulse response function? \\
 \end{figure}
 
 
-\noindent
-\rule{\linewidth}{0.4pt}
-Will work towards a definition where 
-\begin{align*}
-    &\fbox{IRF(r)} \quad \text{is related to (or equal to)} \\
-    % & \frac{ \partial X_{t+r} }{ \partial \varepsilon_t }\\
-\end{align*}
+We aim to define the impulse response function IRF(r), wich is related to or equal to: \[
+ \text{IRF}(r) = \frac{ \partial X_{t+r} }{ \partial \varepsilon_t }
+\]
 
-Suppose $X_t=\alpha + \varepsilon_t +\theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2}$ 
+\textbf{Example: MA(2) Process}\\
+
+Suppose $X_t=\alpha + \varepsilon_t +\theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2}$, where:
 \begin{itemize}
     \item This is a MA(2) process with parameters $\alpha, \theta_1, \theta_2$
-    \item Stationary
-    \item Can define $x_t$ if you know all $\varepsilon_t$s 
-    \begin{align*}
+    \item The process is stationary
+    \item We can define $X_t$ if we know all $\varepsilon_t$s 
+\end{itemize}
+The impulse response function for this process can be calculated as follows: 
+\begin{align*}
     IRF(r)&=\frac{\partial x_{t+r}}{\partial \varepsilon_t}\\
-    IRF(0)&= \frac{d(\alpha+\varepsilon_t+\theta_1 \varepsilon_{t-1}+\theta_2 \varepsilon_{t-2}}{\partial \varepsilon_t}\\ 
+    IRF(0)&= \frac{\partial(\alpha+\varepsilon_t+\theta_1 \varepsilon_{t-1}+\theta_2 \varepsilon_{t-2})}{\partial \varepsilon_t}\\ 
     &=1\\
     IRF(1)&=\theta_1\\
     IRF(2)&=\theta_2
     \end{align*}
-\end{itemize}
 
-IRFs for more general models.
-\begin{itemize}
-    \item Stationary time series are almost always approximated by moving averages (MA) series.
-    \item Mathematically, there is a MA($\infty$) representation of a stationary time series in many cases. 
-    \item Example: AR(1) model:
+    
+\subsubsection{IRFs for More General Models}
+
+Stationary time series are often approximated by moving average (MA) series. Mathematically, a stationary time series can often be represented as an MA($\infty$) series. \\
+
+\textbf{Example: AR(1) Process}\\
+
+Consider an AR(1) model:
     \[
     X_t = \alpha + \rho X_{t-1}+\varepsilon_t
     \]
-    \begin{itemize}
-        \item Invert backshift operator: $X_{t-1}=BX_t$ \[
+By inverting the backshift operator $B$, where $X_{t-1} = BX_t$, we get: 
+       \[
         X_t= \alpha+\rho BX_t +\varepsilon_t
         \]\[
         \Rightarrow (1-pB)X_t=\alpha+\varepsilon_t
         \]
-    \end{itemize}
-    \item If $|p|<1$ its possible to invert $(1-pB)$ (why? if the roots of the "polynomial in B" are outside unit circle, then you can "divide")
-    \begin{itemize}
-        \item Solve $1-\rho B = 0 \longrightarrow B = \frac{1}{\rho} > 1$ if $0<\rho<1$
-    \end{itemize}
-\end{itemize}
-\begin{align*}
-    X_t= \alpha+\rho BX_t +\varepsilon_t\\  
-    \Rightarrow (1-pB)X_t=\alpha+\varepsilon_t \\
-    \text{if } |p|<1 \quad \text{then}\\
-    (1-\rho B)^{-1} = ?
-\end{align*}
-Simpler example 
-\begin{align*}
-    \frac{1}{1-\frac{1}{4}} &= 1+\frac{1}{4} + \frac{1}{16} + \frac{1}{64} + \cdots \\
-    &= \frac{4}{3}
-\end{align*}
-\underline{Define}: \[
-(1-\rho B)^{-1}= 1+\rho B + \rho^2 B^2 + \rho^3 B^3 + \cdots
-\]
-Theorem: if $X_t$ is sufficiently well behaved (stationary etc.) and $|p|<1$ then \[
-(1-\rho B)^{-1}X_t= (1+\rho B + \rho^2 B^2 + \rho^3 B^3)X_t
-\]
-and $(1-\rho B)^{-1} (1-\rho B) X_t = X_t$ (cancellation property).
 
+If $|p|<1$ its possible to invert $(1-pB)$. This is because if the roots of the polynomial in $B$ are outside the unit circle, then we can divide: 
+\[
+1-\rho B = 0 \longrightarrow B = \frac{1}{\rho} > 1 \text{\quad if} 0<\rho<1
+\]
+
+\subsubsection{Inversion and Impulse Response Calculation}
+
+By solving the inversion: \[
+(1-\rho B)^{-1}= (1+\rho B + \rho^2 B^2 + \rho^3 B^3 + \cdots
+\]
+If $X_t$ is sufficiently well-behaved (stationary, etc.) and $|p|<1$, then: 
+\[
+(1-\rho B)^{-1}X_t= (1+\rho B + \rho^2 B^2 + \rho^3 B^3)X_t
+\]\[
+(1-\rho B)^{-1} (1-\rho B) X_t = X_t \text{(cancellation property)}\]
+Thus: 
 \begin{align*}
     X_t &= \alpha+ \rho B X_t + \varepsilon_t\\
     (1-\rho B) X_t &= \alpha + \varepsilon_t \\
     (1-\rho B)^{-1}(1-\rho B) X_t &= (1-\rho B)^{-1} (\alpha + \varepsilon_t)\\
     \Rightarrow X_t &= \alpha + \varepsilon_t + \rho B(\alpha + \varepsilon_t)+ \rho^2 B^2(\alpha+\varepsilon_t) + \cdots
 \end{align*}
-The point: Now you can calculate impulse responses
-\begin{align*}
-    \frac{\partial X_t}{\partial \varepsilon_{t-r}} &= \frac{\partial}{\partial\varepsilon_{t-r}} \rho^r (\alpha+\varepsilon_{t-1}) \\
-    &= \frac{\partial}{\partial \varepsilon_{t-r}} \rho^r \varepsilon_{t-r} \\
-    &= \rho^r\\
-    IRF(r) &= \rho^r
-\end{align*}
-$\rho^r$ measures "where $X_t$ would have been"
+Now, we can calculate the impulse responses: 
+\[
+\frac{\partial X_t}{\partial \epsilon_{t-r}}= \frac{\partial}{\partial \epsilon_{t-r}}\rho^r (\alpha + \epsilon_{t-1} )= \frac{\partial}{\partial \epsilon_{t-r}}\rho^r \epsilon_{t-r} = \rho^r
+\]
+Thus: \[
+IRF(r) = \rho^r
+\]
+
+\subsubsection{Interpretation}
+
+$\rho^r$ measures the impact of a shock $\varepsilon_t$ at time $t$ on $X_t$ at time $t+r$.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\linewidth]{images/Screenshot 2024-05-21 at 18.16.58.jpg}
 \end{figure}
 
-In ARMA(1,1)
+\textbf{MA(2)}
+
+\begin{align*}
+    IRF(0) &= 1 \\
+    IRF(1)&=\theta_1\\
+    IRF(2)&=\theta_2
+    \end{align*}
+    This tells us:
+\begin{itemize}
+    \item IRF(0): A shock at time $t$ affects $X_t$ by $1$ unit.
+    \item IRF(1): A shock at time $t$ affects $X_{t+1}$ by $\theta_1$.
+    \item IRF(2): A shock at time $t$ affects $X_{t+2}$ by $\theta_2$.
+\end{itemize}
+These values indicate how a shock at time $t$ propagates through the system and affects future values of the time series. \\
+
+
+\textbf{ARMA(1,1)} \\
+
 \begin{align*}
     X_t &= \alpha + \rho X_{t-1} + \varepsilon_t + \theta \varepsilon_{t-1} \\
     (1-\rho B)X_t &= \alpha + \varepsilon_t + \theta \varepsilon_{t-1} \\
     X_t &= (1-\rho B)^{-1} (\alpha + \varepsilon_t + \theta \varepsilon_{t-1}) \\
-&= 1\cdot (\alpha + \varepsilon_t + \theta \varepsilon_{t-1} + \rho B (\alpha + \varepsilon_t + \theta \varepsilon_{t-1}) + \rho^2 B^2(\alpha + \varepsilon_t + \theta\varepsilon_{t-1})\\
-&\text{get IRF that way}
+&= 1\cdot (\alpha + \varepsilon_t + \theta \varepsilon_{t-1} + \rho B (\alpha + \varepsilon_t + \theta \varepsilon_{t-1}) + \rho^2 B^2(\alpha + \varepsilon_t + \theta\varepsilon_{t-1})
 \end{align*}
+In this way, we can derive the impulse response function for more complex models.
 
 \subsection{Multivariate Time Series}
 
@@ -238,7 +256,9 @@ where $B$ denotes the backward shift operator, $I$ is the ($2\times 2$) identity
 
 The stationarity of $\mathbf{X}_t$ can be extended from the argument for univariate $X_t$. In particular, the necessary and sufficient condition for stationary of (\ref{vectorForm}) or (\ref{13.13}) is that the roots of the determinant of $I-\Phi B$ lie outside the unit circle. \\
 
-The Appendix~\ref{Determinant Calculation } provides a refresher on how to calculate the determinant of a matrix.\\
+The Appendix (\ref{Determinant Calculation }) provides a refresher on how to calculate the determinant of a matrix.\\
+
+
 
 \underline{Example Exercise: (13.1)} \\
 \begin{footnotesize}
@@ -288,7 +308,7 @@ In general a VAR model of order $p$ (order of autoregression) can be written in 
 \text{determinant}\{\Phi(x)\} = |I-\Phi_1x - \Phi_2 x^2 - \cdots - \Phi_px^p|=0,
 \] should lie outside the unit circle.\\
 
-We need to define $m$-dimensional white noise, such as $\varepsilon_t$ in (\ref{13.14}). Let $\varepsilon_t^T=(\varepsilon_{1t},\varepsilon_{2t},\cdots,\varepsilon_{mt})$ denote an ($m \times 1$) vector of random variables. This multivariate time series will be called \textbf{multivariate white noise} if its is stationary with zero mean vector $\mathbf{0}$, and if the values of $\mathbf{\varepsilon}_t$ at different times are uncorrelated. The the ($m\times m$) matrix of the cross-covariances of the elements of $\mathbf{\varepsilon}_t$ with the elements of $\mathbf{\varepsilon}_{t+j}$ is given by 
+We need to define $m$-dimensional white noise, such as $\varepsilon_t$ in (\ref{13.14}). Let $\varepsilon_t^T=(\varepsilon_{1t},\varepsilon_{2t},\cdots,\varepsilon_{mt})$ denote an ($m \times 1$) vector of random variables. This multivariate time series will be called \textbf{multivariate white noise} if its is stationary with zero mean vector $\mathbf{0}$, and if the values of $\mathbf{\varepsilon}_t$ at different times are uncorrelated. Then the ($m\times m$) matrix of the cross-covariances of the elements of $\mathbf{\varepsilon}_t$ with the elements of $\mathbf{\varepsilon}_{t+j}$ is given by 
 
 \begin{subequations}
 \begin{equation}
@@ -573,7 +593,7 @@ This transformation shows that $Y_t$ depends on the past values of $Y_{t-1}$, th
 
 This shows that we can translate between the structural and reduced forms using these transformations. However, there is 1 exception: if the matrix $(I-B)$ is not invertible. \\
 
-The entire purpose is to evaluate how independent shocks to $\varepsilon_{1t}$ and $\varepsilon_{2t}$ of (\ref{structural}). The structure is that $\varepsilon_{1t} \perp \varepsilon_{2t}$, i.e., shocks are assumed to be independent. \[
+The entire purpose is to evaluate how independent shocks to $\varepsilon_{1t}$ and $\varepsilon_{2t}$ of (\ref{structural}) affect the time series. The structure is that $\varepsilon_{1t} \perp \varepsilon_{2t}$, i.e., shocks are assumed to be independent. \[
 Cov(\varepsilon_{1t}, \varepsilon_{2t}) = 0
 \]
 However, in the reduced form \[
@@ -599,7 +619,7 @@ For that we have many options, we highlight two here:
         \begin{itemize}
             \item How many parameters are there?
             \begin{itemize}
-                \item In structural: 9 in total (with $b_1 = 0$ and $Cov(\varepsilon_{1t},\varepsilon_{2t}=0$ restrictions)
+                \item In structural: 9 in total (with $b_1 = 0$ and $Cov(\varepsilon_{1t},\varepsilon_{2t})=0$ restrictions)
                 \item In reduced form: also 9 total
                 \item $\Rightarrow$ same amount of information in the structural and reduced form models
             \end{itemize}

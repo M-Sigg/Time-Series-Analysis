@@ -5,58 +5,74 @@ Given an observed time series, estimate which model best approximates its dynami
     \item Choose from $\overbrace{AR(p),MA(q),ARMA(p,q),...}^\text{Model Selection}$ and estimate parameters (e.g., $\underbrace{\alpha_1,\ldots, \alpha_p, \beta_1,\ldots,\beta_q}_\text{estimation}$).
 \end{itemize}
 
-\textbf{\underline{Inference}}: Draw confidence intervals for parameters estimates \\
+\underline{\textbf{Inference}: Draw confidence intervals for parameters estimates} \\
 
-\textit{Note}: Inference for the mean of a stationary time series:\\
+\textit{Note}: Inference for the mean of a stationary time series.\\
 
-Let $X_t$ be a stationary time series. That means $E[X_t]=E[X_{t+1}]=E[X_{t+2}]=\ldots=\mu $. So $\mu$ is "population unconditional mean". Let $\gamma_k$ be the $k^{-th}$-order population autocovariance
+Let $X_t$ be a stationary time series. This means $\mathbb{E}[X_t]=\mathbb{E}[X_{t+1}]=\mathbb{E}[X_{t+2}]=\ldots=\mu $. So $\mu$ is "population unconditional mean". Let $\gamma_k$ be the $k^{-th}$-order population autocovariance
 \[
-\gamma_k=Cov(X_t,_{t-k})
+\gamma_k=Cov(X_t,X_{t-k})
 \]
-Problem: Confidence interval for $\mu$ given $X_1,\ldots,X_T$
+We want to determine the confidence interval for $\mu$ given $X_1,\ldots,X_T$
 
 \begin{figure}[H]
 \includegraphics[scale=0.4]{images/Screenshot 2024-03-31 at 16.34.09.jpg}
 \centering
 \end{figure}
 
-Regular stats confidence interval (margin of error measure): $\hat{\mu}=\frac{1}{T}\sum_{t=1}^T X_t=\bar{X}_T$\\
+Regular stats confidence interval (margin of error measure) is calculated as $\hat{\mu}=\frac{1}{T}\sum_{t=1}^T X_t=\bar{X}_T$\\
 
-Want: C.I [a,b] s.t. $Pr(\mu$ in [a,b]$) \geq 95\%$ \\
+We want to construct a confidence interval $[a,b]$ such that $Pr(\mu$ in [a,b]$) \geq 95\%$ \\
 
-\underline{Strategy}:
+The \underline{strategy} to achieve this involves several steps. First, calculate $\text{var}(\hat{\mu}) = \text{var}(\bar{X}_T)$. By the Central Limit Theorem, $\hat{\mu}$ is approximately Gaussian. We can then use the 95\% quantiles of the Gaussian distribution with variance $\text{var}(\hat{\mu})$ to produce a formula that can be coded and implemented on a computer.\\
 
-\begin{itemize}
-    \item Calculate $var(\hat{\mu})=var(\bar{X}_T) $
-    \item By Central Limit Theorem, $\Rightarrow \hat{\mu} \approx$ Gaussian
-    \item Use 95\% quantiles of Gaussian with variance $var(\hat{\mu})$
-    \item Produce a formula that can be coded and given to computer
-\end{itemize}
-Fact: If $\hat{\gamma}_k$ are sample analogues: do not use all of them for the sum because \begin{align*}
-    \hat{var}(\hat{\mu}) &= \frac{1}{T}\sum_{t=1}^T var(X_t) + \frac{1}{T^2} \sum_{t\neq t} Cov(X_t, X_s) \\
-    &= \frac{1}{T} T \hat{\gamma}_0 + \frac{1}{T^2} \sum_{s\neq t} \hat{\gamma}_k\\
-    &= \hat{\gamma}_0 + \frac{1}{T^2} \sum_{k=1}^T \hat{\gamma}_k \cdot (T-k)
-    &\text{vanishes $(=0)$ degrees of freedom problem}
-\end{align*}
-So instead, truncate at a given lag $h$. $l<<h<<T$ \quad Say \( \lfloor \sqrt{T} \rfloor \) or \( \lfloor log T \rfloor \)
-\[
-\hat{var}(\hat{\mu})=\frac{\hat{\gamma}_0}{1} + \frac{1}{T^2}\sum_{k=1}^h \hat{\gamma}_k (T-k)
-\]
-Then C.I $[a,b]=\hat{\mu} \pm 1.96 \sqrt{\hat{var}(\hat{\mu})} $
-Sometimes called $\underbrace{\text{"HAC"}}_\text{heteroskedasticity, autocorrelation consistent}$ estimator
-
+Fact: When using sample analogues $\hat{\gamma}_k$, it is important not to use all of them for the sum due to the degrees of freedom problem:
 \begin{align*}
-    var(\hat{\mu})&=var(\frac{1}{T}\sum_{t=1}^T X_t) \leftarrow \text{ difficult to expand if $Cov(X_t, X_s)\neq 0$}\\
-    &=\frac{1}{T^2} \sum_{t=1}^T var(X_t) + \frac{1}{T^2} \sum_{s\neq t} Cov(X_t,X_s)\\
+    \widehat{\text{var}}(\hat{\mu}) &= \frac{1}{T^2} \sum_{t=1}^T \sum_{s=1}^T \text{Cov}(X_t, X_s) \\
+    &= \frac{1}{T^2} \left( \sum_{t=1}^T \text{Var}(X_t) + \sum_{t=1}^T \sum_{\substack{s=1 \\ s \neq t}}^T \text{Cov}(X_t, X_s) \right) \\
+    &= \frac{\gamma_0}{T} + \frac{1}{T^2} \sum_{k=1}^{T-1} \gamma_k(T - k)
 \end{align*}
 
-usually with iid. data: would just estimate $\hat{var}(\hat{\mu})=\frac{1}{T}\sum_{t=1}^T(X_t-\hat{\mu})^2=\hat{\gamma}_0 $. Then form C.I.: $\hat{\mu}\pm 1.96 \times \frac{\sqrt{\hat{\gamma}_0}}{\sqrt{T}} $
+This results in a quadratic increase in the number of terms. However, as the lag increases, the number of pairs available for covariance calculation decreases, leading to fewer degrees of freedom and eventually, it vanishes.\\
 
-\underline{In time series data}:
-\begin{itemize}
-    \item Can form $\hat{\gamma}_k$ for all $k$, and use it carefully
-\end{itemize}
+To address this \textbf{degrees of freedom problem} we truncate the sum at a given lag $h$, where $l \ll h \ll T$. A common choice for $h$ is $\lfloor \sqrt{T} \rfloor$ or $\lfloor \log T \rfloor$. The truncated variance estimate is:
 
+\[
+\widehat{\text{var}}(\hat{\mu}) = \frac{\gamma_0}{T} + \frac{1}{T^2} \sum_{k=1}^h \gamma_k (T - k).
+\]
+Then, the confidence interval is given by:
+\[
+\text{C.I.} [a, b] = \hat{\mu} \pm 1.96 \sqrt{\widehat{\text{var}}(\hat{\mu})}.
+\]
+This estimator is sometimes called the "HAC" estimator, which stands for heteroskedasticity and autocorrelation consistent. \\
+
+To further elaborate, the variance of $\hat{\mu}$ is:
+\[
+\text{var}(\hat{\mu}) = \text{var}\left(\frac{1}{T} \sum_{t=1}^T X_t\right).
+\]
+This is difficult to expand if $\text{Cov}(X_t, X_s) \neq 0$. Thus, we write it as:
+\[
+\text{var}(\hat{\mu}) = \frac{1}{T^2} \sum_{t=1}^T \text{var}(X_t) + \frac{1}{T^2} \sum_{s \neq t} \text{Cov}(X_t, X_s).
+\]
+
+In the case of iid data, we would estimate $\widehat{\text{var}}(\hat{\mu}) = \frac{1}{T} \sum_{t=1}^T (X_t - \hat{\mu})^2 = \gamma_0$. The confidence interval is then formed as:
+\[
+\hat{\mu} \pm 1.96 \times \frac{\sqrt{\hat{\gamma_0}}}{\sqrt{T}}.
+\]
+
+
+For time series data, one can form $\hat{\gamma}_k$ for all $k$ and use them carefully. \\
+
+The \textbf{Heteroskedasticity and Autocorrelation Consistent (HAC) Estimators} are used to provide robust standard errors in the presence of heteroskedasticity and autocorrelation in the error terms of a regression model. These estimators adjust the covariance matrix of the parameter estimates to account for the fact that the error term may not be identically distributed (heteroskedasticity) and may be correlated across time (autocorrelation).
+
+\textbf{Purpose of HAC Estimators}
+
+HAC estimators are primarily used for the following purposes:
+\begin{enumerate}
+    \item \textbf{Correcting Standard Errors:} In the presence of heteroskedasticity and autocorrelation, the usual OLS standard errors can be biased and inconsistent. HAC estimators correct for these issues, providing more accurate standard errors.
+    \item \textbf{Reliable Inference:} With corrected standard errors, the confidence intervals and hypothesis tests based on these estimates are more reliable. This is crucial for making valid statistical inferences about the parameters of the model.
+\end{enumerate}
+The bandwidth (or lag) in HAC estimators determines how many lags of the autocorrelation are considered when estimating the covariance. The choice of bandwidth affects the robustness of the standard errors.
 
 \subsection{PACF}
 
@@ -93,7 +109,7 @@ In the first order case we get: \[
 \] Then the estimator becomes \[
 \hat{\alpha}_1 \approx \frac{\sum_{t=1}^{N-1} (x_t-\bar{x})(x_{t+1}-\bar{x}) }{\sum_{t=1}^{N-1} (x_t- \bar{x})^2}
 \]
-This is basically the same estimator as in an ordinary regression with $X-{t-1}-\bar{x}$ as the 'independent' variable. In fact, asymptotically, much of classical regression theory can be applies to AR models. \\
+This is basically the same estimator as in an ordinary regression with $X_{t-1}-\bar{x}$ as the 'independent' variable. In fact, asymptotically, much of classical regression theory can be applied to AR models. \\
 Further approximation, can be used by changing the denominator to \[\sum_{t=1}^N(x_t-\bar{x})^2\] So that \begin{align*}
     \hat{{\alpha}}_1 &\simeq \frac{c_1}{c_0}\\
     &= r_1
@@ -109,7 +125,7 @@ In a second order case, we'd get \begin{align*}
 Estimation is more difficult for an MA process than an AR process, because some form of numerical iteration must be performed. First, consider a MA(1) process: \begin{align}
 X_t = \mu + Z_t + \beta_1 Z_{t-1} \label{4.13}
 \end{align}
-Unfortunately, we cannot write the residual sum of squares $\Sigma Z_t^2$ solely in terms of the observed $x$s and the parameters $\mu, \beta_1$ and so no explicit least squares estimates can be found. One possible alternative is to (i) Select suitable starting values for $\mu$ and $\beta_1$, such as $\mu=\bar{x}$ and the value of $\beta_1$ given by the solution to this equation: $r_1 = \hat{\beta}_1/ (1+\hat{\beta}_1^2)$. (ii) Calculate the corresponding residual sum of squares using Equation (\ref{4.13}) recursively in the form \[ Z_t = X_t -\mu -\beta_1 Z_{t-1}\] Taking $z_0 = 0$, we get $z_1 = x_1 -\hat{\mu}$, and then $z_2 = x_1 -\hat{\mu}-\hat{\beta}_1 z_1$, and so on until $z_N = x_N- \hat{\mu}- \hat{\beta}_1 z_{N-1}$. Then the residual sum of squares $\sum_{t=1}^N z_t^2$ is calculated conditional on the given values of the parameters $/mu$ and $\beta_1$ and $z_0=0$. (iii) Repeat this procedure for other neighbouring values of $\mu$ and $\beta_1$ so that the residual sum of squares $\Sigma z_t^2$ is computed on a grid of points in the $(\mu,\beta_1)$ plane. (iv) Determine by inspection the values of $\mu$ and $\beta_1$ that minimize $\Sigma z_t^2$.
+Unfortunately, we cannot write the residual sum of squares $\Sigma Z_t^2$ solely in terms of the observed $x$s and the parameters $\mu, \beta_1$ and so no explicit least squares estimates can be found. One possible alternative is to (i) Select suitable starting values for $\mu$ and $\beta_1$, such as $\mu=\bar{x}$ and the value of $\beta_1$ given by the solution to this equation: $r_1 = \hat{\beta}_1/ (1+\hat{\beta}_1^2)$. (ii) Calculate the corresponding residual sum of squares using Equation (\ref{4.13}) recursively in the form \[ Z_t = X_t -\mu -\beta_1 Z_{t-1}\] Taking $z_0 = 0$, we get $z_1 = x_1 -\hat{\mu}$, and then $z_2 = x_1 -\hat{\mu}-\hat{\beta}_1 z_1$, and so on until $z_N = x_N- \hat{\mu}- \hat{\beta}_1 z_{N-1}$. Then the residual sum of squares $\sum_{t=1}^N z_t^2$ is calculated conditional on the given values of the parameters $\mu$ and $\beta_1$ and $z_0=0$. (iii) Repeat this procedure for other neighbouring values of $\mu$ and $\beta_1$ so that the residual sum of squares $\Sigma z_t^2$ is computed on a grid of points in the $(\mu,\beta_1)$ plane. (iv) Determine by inspection the values of $\mu$ and $\beta_1$ that minimize $\Sigma z_t^2$.
 
 
 \subsubsection{Estimating Parameters of an ARMA Model}

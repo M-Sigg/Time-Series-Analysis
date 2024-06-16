@@ -88,7 +88,18 @@ Maximum Likelihood Estimation (MLE) is a method for estimating the parameters of
    \frac{\partial^2 \ell(\theta)}{\partial \theta^2} < 0
    \]
 
-\subsubsection*{Example}
+\subsubsection*{General Log-Likelihood Formula Using Residuals}
+
+For models with normally distributed residuals, the general log-likelihood function can be expressed as:
+
+\[ \ell(\theta) \propto -\sum_{t=1}^{T} \left( \log(\sigma_t) + \frac{1}{2} \frac{\text{residual}_t^2}{\sigma_t^2} \right) \]
+
+where:
+- \(\theta\) represents the parameter vector (e.g., \(\mu, \phi, \theta, \alpha, \beta\)).
+- \(\sigma_t^2\) is the conditional variance (which can be constant or time-varying).
+- \(\text{residual}_t\) represents the residuals specific to the model.
+
+\subsubsection*{Example: Normal Distribution}
 
 Consider a simple example where we assume the data \(\{x_1, x_2, \ldots, x_n\}\) are drawn from a normal distribution with unknown mean \(\mu\) and known variance \(\sigma^2\).
 
@@ -113,6 +124,30 @@ Consider a simple example where we assume the data \(\{x_1, x_2, \ldots, x_n\}\)
    \]
    This is the sample mean, which is the MLE for the mean of a normal distribution with known variance.
 
+\subsubsection*{Example: ARMA Model}
+
+For an ARMA(p, q) model, the residuals are:
+
+\[ \text{residual}_t = X_t - \mu - \sum_{i=1}^p \phi_i X_{t-i} - \sum_{j=1}^q \theta_j \epsilon_{t-j} \]
+
+The log-likelihood function is:
+
+\[ \ell(\mu, \phi, \theta, \sigma^2) \propto -\sum_{t=1}^{T} \left( \log(\sigma) + \frac{\text{residual}_t^2}{2\sigma^2} \right) \]
+
+\subsubsection*{Example: ARMA-GARCH Model}
+
+For an ARMA(p, q)-GARCH(h, k) model, the residuals are:
+
+\[ \text{residual}_t = X_t - \mu - \sum_{i=1}^p \phi_i X_{t-i} - \sum_{j=1}^q \theta_j \epsilon_{t-j} \]
+
+The conditional variance \(\sigma_t^2\) is time-varying:
+
+\[ \sigma_t^2 = \alpha_0 + \sum_{i=1}^h \alpha_i \epsilon_{t-i}^2 + \sum_{j=1}^k \beta_j \sigma_{t-j}^2 \]
+
+The log-likelihood function is:
+
+\[ \ell(\mu, \phi, \theta, \alpha, \beta) \propto -\sum_{t=1}^{T} \left( \log(\sigma_t) + \frac{\text{residual}_t^2}{\sigma_t^2} \right) \]
+
 \subsubsection*{Advantages and Disadvantages}
 
 \textbf{Advantages}:
@@ -127,3 +162,7 @@ Consider a simple example where we assume the data \(\{x_1, x_2, \ldots, x_n\}\)
     \item Can be computationally intensive, especially for large datasets or complex models.
     \item Sensitive to model assumptions; incorrect assumptions can lead to biased estimates.
 \end{itemize}
+
+
+
+
